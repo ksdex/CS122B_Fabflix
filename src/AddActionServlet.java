@@ -1,0 +1,48 @@
+import com.google.gson.JsonObject;
+
+import javax.annotation.Resource;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.sql.DataSource;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.SQLException;
+
+
+// Declaring a WebServlet called StarsServlet, which maps to url "/api/stars"
+@WebServlet(name = "AddactionServlet", urlPatterns = "/api/addaction")
+public class AddActionServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
+
+    // Create a dataSource which registered in web.xml
+    @Resource(name = "jdbc/moviedb")
+    private DataSource dataSource;
+
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String action = request.getParameter("action");
+        try {
+            Connection dbcon = dataSource.getConnection();
+            PrintWriter out = response.getWriter();
+            if (action != null) {
+                if (action.equals("addstar")) {
+                    JsonObject addstarresult = HelperFunc.addStarButton(dbcon, request);
+                    out.write(addstarresult.toString());
+                }
+                if (action.equals("addmovie")) {
+                    JsonObject addmovieresult = HelperFunc.addMovieButton(dbcon, request);
+                    out.write(addmovieresult.toString());
+                }
+
+                out.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}
