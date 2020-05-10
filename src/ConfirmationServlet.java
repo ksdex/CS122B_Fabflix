@@ -12,6 +12,7 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.HashMap;
@@ -51,9 +52,9 @@ public class ConfirmationServlet extends HttpServlet {
                     // Declare our statement
                     String movieId = entry.getKey();
                     float[] itemInfo = entry.getValue();
-                    Statement statement = dbcon.createStatement();
                     String query = "SELECT m.title from movies as m where id = '" + movieId + "'";
-                    ResultSet rs = statement.executeQuery(query);
+                    PreparedStatement statement = dbcon.prepareStatement(query);
+                    ResultSet rs = statement.executeQuery();
                     float totalPrice = 0;
 
                     // Iterate through each row of rs

@@ -1,7 +1,4 @@
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 
 import org.jasypt.util.password.PasswordEncryptor;
@@ -28,17 +25,17 @@ public class UpdateSecurePassword {
 
         Class.forName("com.mysql.jdbc.Driver").newInstance();
         Connection connection = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
-        Statement statement = connection.createStatement();
 
         // change the customers table password column from VARCHAR(20) to VARCHAR(128)
         String alterQuery = "ALTER TABLE employees MODIFY COLUMN password VARCHAR(128)";
-        int alterResult = statement.executeUpdate(alterQuery);
+        PreparedStatement statement = connection.prepareStatement(alterQuery);
+        int alterResult = statement.executeUpdate();
         HelperFunc.printToConsole("altering employees table schema completed, " + alterResult + " rows affected");
 
         // get the ID and password for each customer
         String query = "SELECT email, password from employees";
-
-        ResultSet rs = statement.executeQuery(query);
+        statement = connection.prepareStatement(query);
+        ResultSet rs = statement.executeQuery();
 
         // we use the StrongPasswordEncryptor from jasypt library (Java Simplified Encryption) 
         //  it internally use SHA-256 algorithm and 10,000 iterations to calculate the encrypted password
@@ -66,7 +63,8 @@ public class UpdateSecurePassword {
         HelperFunc.printToConsole("updating password");
         int count = 0;
         for (String updateQuery : updateQueryList) {
-            int updateResult = statement.executeUpdate(updateQuery);
+            statement = connection.prepareStatement(updateQuery);
+            int updateResult = statement.executeUpdate();
             count += updateResult;
         }
         HelperFunc.printToConsole("updating password completed, " + count + " rows affected");

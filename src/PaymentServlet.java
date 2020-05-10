@@ -11,10 +11,7 @@ import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
@@ -63,13 +60,13 @@ public class PaymentServlet extends HttpServlet {
             // If date info is correctly formatted -> check database
             else {
                 dbcon = dataSource.getConnection();
-                Statement statement = dbcon.createStatement();
                 String query = "SELECT * from creditcards as c " +
                                 " where id = '" + cardNum + "'" +
                                 " and firstName = '" + firstName + "'" +
                                 " and lastName = '" + lastName + "'" +
                                 " and expiration = '" + date + "'";
-                ResultSet rs = statement.executeQuery(query);
+                PreparedStatement statement = dbcon.prepareStatement(query);
+                ResultSet rs = statement.executeQuery();
                 if (!rs.next()) {
                     HelperFunc.printToConsole("fail");
                     responseJsonObject.addProperty("status", "fail");
@@ -92,8 +89,8 @@ public class PaymentServlet extends HttpServlet {
                         for(int i = 0; i < itemInfo[0]; i++) {
                             String query2 = "insert into sales (customerId, movieId, saleDate) values (" +
                                                 customerId + ", '" + movieId + "', '" + d + "')";
-                            Statement statement2 = dbcon.createStatement();
-                            int retID = statement2.executeUpdate(query2);
+                            PreparedStatement statement2 = dbcon.prepareStatement(query2);
+                            int retID = statement2.executeUpdate();
                             HelperFunc.printToConsole("retId" + retID);
                             statement2.close();
                         }

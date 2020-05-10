@@ -12,6 +12,7 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Map;
@@ -92,11 +93,11 @@ public class ShoppingCartServlet extends HttpServlet {
                     // Declare our statement
                     String movieId = entry.getKey();
                     float[] itemInfo = entry.getValue();
-                    Statement statement = dbcon.createStatement();
                     String query = "SELECT m.title from movies as m where id = '" + movieId + "'";
+                    PreparedStatement statement = dbcon.prepareStatement(query);
 
                     // Perform the query
-                    ResultSet rs = statement.executeQuery(query);
+                    ResultSet rs = statement.executeQuery();
                     // Iterate through each row of rs
                     while (rs.next()) {
                         String movie_title = rs.getString("title");

@@ -11,6 +11,7 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
@@ -26,11 +27,10 @@ public class MainpageServlet extends HttpServlet{
         PrintWriter out = response.getWriter();
         try {
             Connection dbcon = dataSource.getConnection();
-            Statement statement = dbcon.createStatement();
 
             String query = "SELECT * from genres";
-
-            ResultSet rs = statement.executeQuery(query);
+            PreparedStatement statement = dbcon.prepareStatement(query);
+            ResultSet rs = statement.executeQuery();
 
             JsonArray jsonArray = new JsonArray();
             // Iterate through each row of rs

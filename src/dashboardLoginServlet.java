@@ -28,9 +28,9 @@ public class dashboardLoginServlet extends HttpServlet {
         // int sameuser = 0;
         try {
             dbcon = dataSource.getConnection();
-            Statement statement = dbcon.createStatement();
             String query = "SELECT email, password from employees where email = '"+email+"'";
-            ResultSet rs = statement.executeQuery(query);
+            PreparedStatement statement = dbcon.prepareStatement(query);
+            ResultSet rs = statement.executeQuery();
             // Process database output
             if(!rs.next()){
                 responseJsonObject.addProperty("status", "fail");
@@ -70,11 +70,10 @@ public class dashboardLoginServlet extends HttpServlet {
         String loginPasswd = "mypassword";
         String loginUrl = "jdbc:mysql://localhost:3306/moviedb";
 
-        Statement statement = connection.createStatement();
-
         String query = String.format("SELECT * from employees where email='%s'", email);
+        PreparedStatement statement = connection.prepareStatement(query);
 
-        ResultSet rs = statement.executeQuery(query);
+        ResultSet rs = statement.executeQuery();
 
         boolean success = false;
         if (rs.next()) {

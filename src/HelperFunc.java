@@ -59,8 +59,8 @@ public class HelperFunc {
     static public JsonObject addStarButton(Connection dbcon, HttpServletRequest request) throws IOException, SQLException {
         String starname = request.getParameter("starname");
         String birthyear = request.getParameter("birthyear");
-        Statement statement= dbcon.createStatement();
-        ResultSet rs = statement.executeQuery("select max(id) as maxid from stars");
+        PreparedStatement statement = dbcon.prepareStatement("select max(id) as maxid from stars");
+        ResultSet rs = statement.executeQuery();
         String maxid = "0";
         while(rs.next()){
             maxid = rs.getString("maxid");
@@ -189,8 +189,8 @@ public class HelperFunc {
 
 
     static public JsonArray movieListTable(String query, Connection dbcon) throws SQLException {
-        Statement statement = dbcon.createStatement();
-        ResultSet rs = statement.executeQuery(query);
+        PreparedStatement statement = dbcon.prepareStatement(query);
+        ResultSet rs = statement.executeQuery();
         JsonArray jsonArray = new JsonArray();
         // Iterate through each row of rs
         while (rs.next()) {
@@ -207,8 +207,7 @@ public class HelperFunc {
             jsonObject.addProperty("movie_year", movie_year);
             jsonObject.addProperty("movie_director", movie_director);
             jsonObject.addProperty("movie_rating", movie_rating);
-            Statement statement2 = dbcon.createStatement();
-            ResultSet rs2 = statement2.executeQuery(
+            PreparedStatement statement2 = dbcon.prepareStatement(
                     "select sim.starId, siom.name, count(sim.starId) from stars_in_movies as sim, (" +
                             "select starId, name from movies,stars,stars_in_movies where stars.id=stars_in_movies.starId " +
                             "and stars_in_movies.movieId=movies.id and movies.id='" + movie_id + "' " +
@@ -216,6 +215,7 @@ public class HelperFunc {
                             "where sim.starId = siom.starId " +
                             "group by sim.starId " +
                             "order by count(sim.starId) desc, siom.name");
+            ResultSet rs2 = statement2.executeQuery();
             JsonObject starsJsonObject = new JsonObject();
             int count = 1;
             while(rs2.next()){
@@ -229,11 +229,10 @@ public class HelperFunc {
             rs2.close();
             statement2.close();
 
-            Statement statement3 = dbcon.createStatement();
-            ResultSet rs3 = statement3.executeQuery(
-                    "select * from movies,genres,genres_in_movies" +
-                            " where genres.id=genres_in_movies.genreId and genres_in_movies.movieId=movies.id" +
-                            " and movies.id='" + movie_id + "' order by genres.name");
+            PreparedStatement statement3 = dbcon.prepareStatement("select * from movies,genres,genres_in_movies" +
+                    " where genres.id=genres_in_movies.genreId and genres_in_movies.movieId=movies.id" +
+                    " and movies.id='" + movie_id + "' order by genres.name");
+            ResultSet rs3 = statement3.executeQuery();
             JsonObject genresJsonObject = new JsonObject();
             count = 1;
             while(rs3.next()){

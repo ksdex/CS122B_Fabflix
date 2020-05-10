@@ -17,10 +17,14 @@ function handleReturnUrl(lastParam){
         return url;
     }
     else{
-        url += "?"
+        url += "?";
         consolePrint(lastParam);
         for(let item in lastParam){
-            url += item + "=" + lastParam[item] + "&";
+            // consolePrint(lastParam[item]);
+            // consolePrint(lastParam[item] != null);
+            if(lastParam[item] != null) {
+                url += item + "=" + lastParam[item] + "&";
+            }
         }
         url += "back=1";
         return url;

@@ -12,6 +12,7 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
@@ -41,13 +42,13 @@ public class dashboardServlet extends HttpServlet {
             // Get a connection from dataSource
             Connection dbcon = dataSource.getConnection();
             // Declare our statement
-            Statement statement = dbcon.createStatement();
             String query = "show tables where Tables_in_moviedb != 'customer_save'";
-            ResultSet rs = statement.executeQuery(query);
+            PreparedStatement statement = dbcon.prepareStatement(query);
+            ResultSet rs = statement.executeQuery();
             while(rs.next()){
                 String tablename = rs.getString("Tables_in_moviedb");
-                Statement statement2 = dbcon.createStatement();
-                ResultSet rs2 = statement2.executeQuery("describe "+tablename);
+                PreparedStatement statement2 = dbcon.prepareStatement("describe " + tablename);
+                ResultSet rs2 = statement2.executeQuery();
                 while(rs2.next()){
                     JsonObject tableObject = new JsonObject();
                     tableObject.addProperty("tablename",tablename);
@@ -55,11 +56,15 @@ public class dashboardServlet extends HttpServlet {
                     tableObject.addProperty("type", rs2.getString("Type"));
                     result.add(tableObject);
                 }
+                statement2.close();
+                rs2.close();
             }
             out.write( result.toString() );
             // set response status to 200 (OK)
             response.setStatus(200);
             dbcon.close();
+            statement.close();
+            rs.close();
         } catch (Exception e) {
             // write error message JSON object to output
             JsonObject jsonObject = new JsonObject();

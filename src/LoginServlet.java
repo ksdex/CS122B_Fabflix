@@ -9,12 +9,8 @@ import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.*;
 import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import org.jasypt.util.password.StrongPasswordEncryptor;
@@ -36,9 +32,9 @@ public class LoginServlet extends HttpServlet {
         // int sameuser = 0;
         try {
             dbcon = dataSource.getConnection();
-            Statement statement = dbcon.createStatement();
             String query = "SELECT password, id from customers where email = '"+email+"'";
-            ResultSet rs = statement.executeQuery(query);
+            PreparedStatement statement = dbcon.prepareStatement(query);
+            ResultSet rs = statement.executeQuery();
             // Process database output
             if(!rs.next()){
                 responseJsonObject.addProperty("status", "fail");
@@ -80,11 +76,10 @@ public class LoginServlet extends HttpServlet {
 
         Class.forName("com.mysql.jdbc.Driver").newInstance();
         Connection connection = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
-        Statement statement = connection.createStatement();
 
         String query = String.format("SELECT * from customers where email='%s'", email);
-
-        ResultSet rs = statement.executeQuery(query);
+        PreparedStatement statement = connection.prepareStatement(query);
+        ResultSet rs = statement.executeQuery();
 
         boolean success = false;
         if (rs.next()) {
