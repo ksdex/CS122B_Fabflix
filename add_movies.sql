@@ -23,6 +23,7 @@ set count_genre = (select count(*) from genres where genres.name = genre_name_in
 	IF count_movie = 0 THEN 
         set new_movie_id = (select concat('tt', (select (SELECT CAST((SELECT SUBSTRING_INDEX((select max(id) from movies),'t',-1)) AS UNSIGNED)) +1)));
 		INSERT INTO movies (id, title, year, director) VALUES (new_movie_id, title_input, year_input, director_input);
+		INSERT INTO ratings(movieId, rating, numVotes) values(new_movie_id, 0, 0);
         
         IF (count_star = 0) THEN
             set new_star_id = (select concat('nm', (select (SELECT CAST((SELECT SUBSTRING_INDEX((select max(id) from stars),'m',-1)) AS UNSIGNED)) +1)));
