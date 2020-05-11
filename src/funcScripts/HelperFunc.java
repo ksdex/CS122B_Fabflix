@@ -309,44 +309,6 @@ public class HelperFunc {
         String year = request.getParameter("year");
         String genre = request.getParameter("genre");
         String starname = request.getParameter("starname");
-//        String searchMovie = "select * from movies where title = ?, year=?, director=?";
-//        PreparedStatement moviePS = dbcon.prepareStatement(searchMovie);
-//        moviePS.setString(1,title);
-//        moviePS.setInt(2,year);
-//        moviePS.setString(3,director);
-//        ResultSet rsmovie = moviePS.executeQuery();
-//        boolean dupMovie = false, dupStar = false, dupGenre=false;
-//        if(rsmovie.next()){
-//            dupMovie = true;
-//        }
-//        else{
-//            String starid = null;
-//            int genreid = 0;
-//            String searchStar = "select * from stars where name = ?";
-//            PreparedStatement starPS = dbcon.prepareStatement(searchStar);
-//            starPS.setString(1,starname);
-//            ResultSet rsstar = starPS.executeQuery();
-//            if(rsstar.next()){
-//                dupStar = true;
-//                starid = rsstar.getString("id");
-//            }
-//            else{
-//                dupStar = false;
-//                JsonObject starjson = addStarButton(dbcon,request);
-//                starid = starjson.get("id").toString();
-//            }
-//            String searchGenre = "select * from genres where name = ?";
-//            PreparedStatement genrePS = dbcon.prepareStatement(searchGenre);
-//            genrePS.setString(1,starname);
-//            ResultSet rsstar = starPS.executeQuery();
-//        }
-//
-
-//        if(dupMovie){
-//            jsonObject.addProperty("status", "fail");
-//            jsonObject.addProperty("message", "Cannot add duplicate movie");
-//            return jsonObject;
-//        }
         JsonObject jsonObject = new JsonObject();
         String sql = "call add_movie(?,?,?,?,?,?,?,?,?)";
         CallableStatement cstm = dbcon.prepareCall(sql);

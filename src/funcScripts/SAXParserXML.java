@@ -1,11 +1,11 @@
 package funcScripts;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -114,6 +114,81 @@ public class SAXParserXML {
             }
         }
         return prefix + r;
+    }
+
+    private void wirteMovieRecord2(){
+        try {
+            HelperFunc.initializeLogFile("MovieRecordWriter");
+            HelperFunc.xmlHandlerLog("Start writing MoviesRecord.");
+            String getallQuery = "select * from movies";
+            Map<Integer,List<String>> moviemap=new HashMap<Integer, List<String>>();
+            Statement allmovieStatement = dbcon.createStatement();
+            ResultSet allmovies = allmovieStatement.executeQuery(getallQuery);
+            while(allmovies.next()){
+                List<String> movieElements = new ArrayList<>();
+                movieElements.add(allmovies.getString("title"));
+                movieElements.add(allmovies.getString("year"));
+                movieElements.add(allmovies.getString("director"));
+                String id = allmovies.getString("id");
+                moviemap.put(Integer.parseInt(id.substring(2,id.length())),movieElements);//get the number after tt as int
+            }
+            allmovies.close();
+            allmovieStatement.close();
+            String movieIdQuery = "select max(id) as maxId from movies";
+            PreparedStatement statement0 = dbcon.prepareStatement(movieIdQuery);
+            ResultSet rs0 = statement0.executeQuery();
+            int nextMovieId = -1;
+            if(rs0.next()) {
+                String id = rs0.getString("maxId");
+                HelperFunc.printToConsole(id);
+                nextMovieId = Integer.parseInt(id.substring(2, id.length())) + 1;
+                HelperFunc.printToConsole(nextMovieId);
+            }
+            rs0.close();
+            statement0.close();
+            FileWriter fw = new FileWriter("C:\\Users\\wym12\\Documents\\Java_projects\\CS199\\building_average_60min.txt",true);
+            for(int i = 0; i < movieRecord.size(); i++) {
+                // Check duplication
+                MovieRecordClass currentRecord = movieRecord.get(i);
+                List<String> newmovieElement = new ArrayList<>();
+                newmovieElement.add(currentRecord.title);
+                newmovieElement.add(String.valueOf(currentRecord.year));
+                newmovieElement.add(currentRecord.director);
+                String line = System.getProperty("line.separator");
+                StringBuffer str = new StringBuffer();
+                if(moviemap.containsValue(newmovieElement)){
+                    //what to do here?
+//                    String sqlId = rs1.getString("id");
+//                    updateMovieMap(currentRecord.id, currentRecord.title, sqlId);
+//                    HelperFunc.xmlHandlerLog("Error: " + currentRecord.toString() + " -> Duplicate entries.");
+                }
+                // If no duplication, then write into a file
+                else{
+                    moviemap.put(nextMovieId,newmovieElement);
+                    str.append("tt"+nextMovieId+","+newmovieElement.get(0)+","+newmovieElement.get(1)+","+newmovieElement.get(2)).append(line);
+                    fw.write(str.toString());
+                    nextMovieId++;
+                }
+            }
+            fw.close();
+            moviemap = null;//release memory
+            //here should write the whole file into the database
+            String inputQuery = "load data infile 'datafilepath here'\n" +
+                    "into table movies\n" +
+                    "fields terminated by ',' optionally enclosed by '\"' escaped by '\"'\n" +
+                    "lines terminated by '\\r\\n'\n" +
+                    "(id,@title,@year,@director)\n" +
+                    "set\n" +
+                    "title = nullif(@title,\"\"),\n"+
+                    "building_id = nullif(@building_id,\"\"),\n" +
+                    "floor_id = nullif(@floor_id,\"\")";
+
+            HelperFunc.xmlHandlerLog("Finish writing MoviesRecord.");
+            HelperFunc.closeLogFile();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
 
