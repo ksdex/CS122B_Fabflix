@@ -150,7 +150,7 @@ function updateList(item, order){
     // consolePrint(document.getElementById(theOtherSort(item)).textContent);
 }
 
-/*
+
 function sortByItem(item, sortOrder, order){
     listSortOrder[sortOrder*2] = item;
     listSortOrder[sortOrder*2 + 1] = order;
@@ -158,7 +158,6 @@ function sortByItem(item, sortOrder, order){
     updateList(item, order);
     sendCurAndMoreParam();
 }
- */
 
 function handleSortOrder(i){
     if(i == 0){
