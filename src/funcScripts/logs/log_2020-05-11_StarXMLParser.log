@@ -1,0 +1,29 @@
+1 2020-05-11 12:32:16 Start parsing StarXML.
+2 2020-05-11 12:32:16 Error: dataClass.StarsRecordClass:  | Alec Baldwin | 0 -> Invalid year format: 195x
+3 2020-05-11 12:32:16 Error: dataClass.StarsRecordClass:  | Vincent Ball | 0 -> Invalid year format: *
+4 2020-05-11 12:32:16 Error: dataClass.StarsRecordClass:  | Halle Berry | 0 -> Invalid year format: 196x
+5 2020-05-11 12:32:16 Error: dataClass.StarsRecordClass:  | Miriam Brickman | 0 -> Invalid year format: dob
+6 2020-05-11 12:32:16 Error: dataClass.StarsRecordClass:  | Soumitra Chatterjee | 0 -> Invalid year format: 19bb
+7 2020-05-11 12:32:16 Error: dataClass.StarsRecordClass:  | George Clooney | 0 -> Invalid year format: dob
+8 2020-05-11 12:32:16 Error: dataClass.StarsRecordClass:  | Lynn Frederick | 0 -> Invalid year format: *
+9 2020-05-11 12:32:16 Error: dataClass.StarsRecordClass:  | Charlotte Gainsbourg | 0 -> Invalid year format: *
+10 2020-05-11 12:32:16 Error: dataClass.StarsRecordClass:  | Terry Hatcher | 0 -> Invalid year format: dob
+11 2020-05-11 12:32:16 Error: dataClass.StarsRecordClass:  | Max Haufler | 0 -> Invalid year format: 19bb
+12 2020-05-11 12:32:16 Error: dataClass.StarsRecordClass:  | Queen Latifah | 0 -> Invalid year format: 19bb
+13 2020-05-11 12:32:16 Error: dataClass.StarsRecordClass:  | David Morrissey | 0 -> Invalid year format: 19bb
+14 2020-05-11 12:32:16 Error: dataClass.StarsRecordClass:  | Mickey Mouse | 0 -> Invalid year format: 19bb
+15 2020-05-11 12:32:16 Error: dataClass.StarsRecordClass:  | Rene Navarre | 0 -> Invalid year format: 18bb
+16 2020-05-11 12:32:16 Error: dataClass.StarsRecordClass:  | Brad Pitt | 0 -> Invalid year format: dob
+17 2020-05-11 12:32:16 Error: dataClass.StarsRecordClass:  | Sarah Polley | 0 -> Invalid year format: 19bb
+18 2020-05-11 12:32:16 Error: dataClass.StarsRecordClass:  | Gilda Radner | 0 -> Invalid year format: *
+19 2020-05-11 12:32:16 Error: dataClass.StarsRecordClass:  | Pamela Reed | 0 -> Invalid year format: *
+20 2020-05-11 12:32:16 Error: dataClass.StarsRecordClass:  | Tanya Roberts | 0 -> Invalid year format: *
+21 2020-05-11 12:32:16 Error: dataClass.StarsRecordClass:  | Howard E. Rollinsjr. | 0 -> Invalid year format: *
+22 2020-05-11 12:32:16 Error: dataClass.StarsRecordClass:  | Tim Roth | 0 -> Invalid year format: 19bb
+23 2020-05-11 12:32:16 Error: dataClass.StarsRecordClass:  | Claudia Schiffer | 0 -> Invalid year format: 19bb
+24 2020-05-11 12:32:16 Error: dataClass.StarsRecordClass:  | Tony Shalhoub | 0 -> Invalid year format: 19bb
+25 2020-05-11 12:32:16 Error: dataClass.StarsRecordClass:  | Posh Spice | 0 -> Invalid year format: 19bb
+26 2020-05-11 12:32:16 Error: dataClass.StarsRecordClass:  | Natalie Talmadge | 0 -> Invalid year format: 19bb
+27 2020-05-11 12:32:16 Error: dataClass.StarsRecordClass:  | Fred Thompson | 0 -> Invalid year format: dob
+28 2020-05-11 12:32:16 Error: dataClass.StarsRecordClass:  | Dianne Wiest | 0 -> Invalid year format: *
+29 2020-05-11 12:32:16 Finish parsing StarXML. Data count: 6836.
