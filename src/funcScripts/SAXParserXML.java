@@ -19,7 +19,6 @@ import funcScripts.xmlParserHandler.MovieXMLParserHandler;
 public class SAXParserXML {
     private List<MovieRecordClass> movieRecord;
     private List<StarsRecordClass> starsRecord;
-    private List<GenresRecordClass> genresRecord;
     private List<StarsInMoviesRecordClass> starsInMoviesRecord;
     private List<GenresInMoviesRecordClass> genresInMoviesRecord;
     private HashMap<String, String> movieIdXMLSQLMap;
@@ -42,7 +41,6 @@ public class SAXParserXML {
     public void run() throws SQLException {
         initializeDatabaseConnection();
         parseDocumentAndWriteToDatabase();
-        printData();
         closeDatabaseConnection();
     }
 
@@ -126,6 +124,7 @@ public class SAXParserXML {
             String insertQuery = "Insert into movies values(?, ?, ?, ?)";
             String movieIdQuery = "select max(id) as maxId from movies";
             String checkDuplicateQuery = "select * from movies where title = ? and year = ? and director = ?";
+            String insertRatingQuery = "Insert into ratings values(?, 0, 0)";
             int nextMovieId = -1;
             PreparedStatement statement0 = dbcon.prepareStatement(movieIdQuery);
             ResultSet rs0 = statement0.executeQuery();
@@ -161,9 +160,12 @@ public class SAXParserXML {
                     statement2.setString(2, currentRecord.title);
                     statement2.setInt(3, currentRecord.year);
                     statement2.setString(4, currentRecord.director);
+                    PreparedStatement statementInsertRating = dbcon.prepareStatement(insertRatingQuery);
+                    statementInsertRating.setString(1, sqlId);
                     int retID = statement2.executeUpdate();
+                    int retID2 = statementInsertRating.executeUpdate();
                     // HelperFunc.printToConsole(retID);
-                    if(retID == 1) {
+                    if(retID == 1 && retID2 == 1) {
                         nextMovieId++;
                     }
                     else{
@@ -423,22 +425,6 @@ public class SAXParserXML {
         catch (Exception e){
             e.printStackTrace();
         }
-    }
-
-
-    /**
-     * Iterate through the list and print
-     * the contents
-     */
-    private void printData() {
-        /*
-        System.out.println("No of Employees '" + movieRecord.size() + "'.");
-
-        Iterator<dataClass.MovieRecordClass> it = movieRecord.iterator();
-        while (it.hasNext()) {
-            System.out.println(it.next().toString());
-        }
-         */
     }
 
 

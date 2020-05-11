@@ -28,6 +28,146 @@ public class HelperFunc {
 
     public static FileWriter fw = null;
     public static int logLineCount = 1;
+    public static HashMap<String, String> movieGenreMap = initializeGenreMap();
+
+
+    static public HashMap<String, String> initializeGenreMap(){
+        HashMap<String, String> resultMap = new HashMap<>();
+        resultMap.put("susp", "Thriller");
+
+        resultMap.put("cnr", "Cops And Robbers");
+        resultMap.put("cnrb", "Cops And Robbers");
+        resultMap.put("cnrbb", "Cops And Robbers");
+
+        resultMap.put("dram", "Drama");
+        resultMap.put("draam", "Drama");
+        resultMap.put("ram", "Drama");
+        resultMap.put("dramn", "Drama");
+        resultMap.put("drama", "Drama");
+        resultMap.put("dramd", "Drama");
+        resultMap.put("dram>", "Drama");
+        resultMap.put("romt dram", "Drama");
+        resultMap.put("docu dram", "Drama");
+
+        resultMap.put("west", "Western");
+        resultMap.put("west1", "Western");
+
+        resultMap.put("myst", "Mystery");
+        resultMap.put("mystp", "Mystery");
+
+        resultMap.put("s.f.", "Sci-Fi");
+        resultMap.put("scfi", "Sci-Fi");
+        resultMap.put("sxfi", "Sci-Fi");
+        resultMap.put("scif", "Sci-Fi");
+
+        resultMap.put("advt", "Adventure");
+        resultMap.put("romtadvt", "Adventure");
+
+        resultMap.put("natu", "Nature");
+
+        resultMap.put("horr", "Horror");
+        resultMap.put("hor", "Horror");
+        resultMap.put("scat", "Horror");
+        resultMap.put("sctn", "Horror");
+
+        resultMap.put("adct", "Adult");
+        resultMap.put("adctx", "Adult");
+        resultMap.put("h", "Adult");
+        resultMap.put("h**", "Adult");
+        resultMap.put("h0", "Adult");
+        resultMap.put("porn", "Adult");
+
+        resultMap.put("anti-dram", "Anti-Drama");
+
+        resultMap.put("avga", "Avant Garde");
+
+        resultMap.put("romt", "Romance");
+        resultMap.put("romtx", "Romance");
+        resultMap.put("ront", "Romance");
+
+        resultMap.put("musc", "Musical");
+        resultMap.put("muscl", "Musical");
+        resultMap.put("tage musical", "Musical");
+
+        resultMap.put("muusc", "Music");
+
+        resultMap.put("sports", "Sport");
+
+        resultMap.put("docu", "Documentary");
+        resultMap.put("ducu", "Documentary");
+
+        resultMap.put("actn", "Action");
+        resultMap.put("act", "Action");
+        resultMap.put("axtn", "Action");
+        resultMap.put("romt actn", "Action");
+        resultMap.put("dram.actn", "Action");
+
+        resultMap.put("faml", "Family");
+
+        resultMap.put("fant", "Fantasy");
+        resultMap.put("fantH*", "Fantasy");
+        resultMap.put("romt fant", "Fantasy");
+
+        resultMap.put("noir", "Black");
+        resultMap.put("comd noir", "Black");
+        resultMap.put("noir comd", "Black");
+        resultMap.put("noir comd romt", "Black");
+
+        resultMap.put("biop", "Biography");
+        resultMap.put("biob", "Biography");
+        resultMap.put("biog", "Biography");
+        resultMap.put("biopp", "Biography");
+        resultMap.put("biopx", "Biography");
+
+        resultMap.put("tv", "Reality-TV");
+
+        resultMap.put("comd", "Comedy");
+        resultMap.put("comd west", "Comedy");
+        resultMap.put("comdx", "Comedy");
+        resultMap.put("cond", "Comedy");
+        resultMap.put("romt comd", "Comedy");
+        resultMap.put("romt. comd", "Comedy");
+
+        resultMap.put("tv series", "tvs");
+
+        resultMap.put("tvm", "TV Miniseries");
+        resultMap.put("tvmini", "TV Miniseries");
+        resultMap.put("txx", "TV Miniseries");
+
+        resultMap.put("cart", "Animation");
+
+        resultMap.put("hist", "History");
+
+        resultMap.put("sati", "Satire");
+
+        resultMap.put("disa", "Disaster");
+
+        resultMap.put("psyc", "Psycho");
+
+        resultMap.put("rfp; h*", "RFP");
+
+        resultMap.put("ca", "Campy");
+        resultMap.put("camp", "Campy");
+
+        resultMap.put("cmr", "Christian-Muslim Relations");
+
+        resultMap.put("surr", "Surreal");
+        resultMap.put("surl", "Surreal");
+
+        resultMap.put("crim", "Crime");
+
+        resultMap.put("dist", "Disaster");
+
+        resultMap.put("viol", "Violence");
+
+        resultMap.put("ctxx", "Uncategorized");
+        resultMap.put("ctcxx", "Uncategorized");
+        resultMap.put("ctxxx", "Uncategorized");
+        resultMap.put("undr", "Uncategorized");
+
+        return resultMap;
+    }
+
 
     static public void initializeLogFile(String fileName){
         java.util.Date day = new Date();
@@ -70,80 +210,9 @@ public class HelperFunc {
 
 
     static public String genreMap(String g){
-        if(g.equalsIgnoreCase("susp")){
-            return "Thriller";
-        }
-        else if(g.equalsIgnoreCase("cnr")){
-            return "Cops And Robbers";
-        }
-        else if(g.equalsIgnoreCase("dram") || g.equalsIgnoreCase("draam") ||
-                g.equalsIgnoreCase("ram") || g.equalsIgnoreCase("Dramn") ||
-                g.equalsIgnoreCase("Drama") || g.equalsIgnoreCase("Dramd") ){
-            return "Drama";
-        }
-        else if(g.equalsIgnoreCase("west") || g.equalsIgnoreCase("west1")){
-            return "Western";
-        }
-        else if(g.equalsIgnoreCase("myst")){
-            return "Mystery";
-        }
-        else if(g.equalsIgnoreCase("s.f.") || g.equalsIgnoreCase("ScFi") ||
-                g.equalsIgnoreCase("SCIF") || g.equalsIgnoreCase("SxFi")){
-            return "Sci-Fi";
-        }
-        else if(g.equalsIgnoreCase("advt")){
-            return "Adventure";
-        }
-        else if(g.equalsIgnoreCase("horr")){
-            return "Horror";
-        }
-        else if(g.equalsIgnoreCase("romt")){
-            return "Romantic";
-        }
-        else if(g.equalsIgnoreCase("musc")){
-            return "Musical";
-        }
-        else if(g.equalsIgnoreCase("docu")){
-            return "Documentary";
-        }
-        else if(g.equalsIgnoreCase("porn")){
-            return "Adult";
-        }
-        else if(g.equalsIgnoreCase("actn") || g.equalsIgnoreCase("act")){
-            return "Action";
-        }
-        else if(g.equalsIgnoreCase("fant")){
-            return "Fantasy";
-        }
-        else if(g.equalsIgnoreCase("noir")){
-            return "Black";
-        }
-        else if(g.equalsIgnoreCase("biop") || g.equalsIgnoreCase("biob")){
-            return "Biography";
-        }
-        else if(g.equalsIgnoreCase("tv")){
-            return "Reality-TV";
-        }
-        else if(g.equalsIgnoreCase("tvs")){
-            return "TV Series";
-        }
-        else if(g.equalsIgnoreCase("tvm")){
-            return "TV Miniseries";
-        }
-        else if(g.equalsIgnoreCase("cart")){
-            return "Animation";
-        }
-        else if(g.equalsIgnoreCase("hist")){
-            return "History";
-        }
-        else if(g.equalsIgnoreCase("cnrb")){
-            return "Cops and Robbers";
-        }
-        else if(g.equalsIgnoreCase("disa")){
-            return "Disaster";
-        }
-        else if(g.equalsIgnoreCase("surr")){
-            return "Surreal";
+        String result = movieGenreMap.get(g.toLowerCase());
+        if(result != null) {
+            return result;
         }
         else{
             return firstInit(g);

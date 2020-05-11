@@ -111,7 +111,7 @@ public class MovieXMLParserHandler  extends DefaultHandler {
         else if (qName.equalsIgnoreCase("cat")){
             HelperFunc.printToConsole("cat: " + tempVal + " | " + HelperFunc.genreMap(tempVal));
             HelperFunc.printToConsole(tempGenreInMovie);
-            if(recordIsValid) {
+            if(recordIsValid && tempVal.length() != 0) {
                 tempGenreInMovie = new GenresInMoviesRecordClass();
                 tempGenreInMovie.genreName = HelperFunc.genreMap(tempVal);
                 tempGenreInMovie.movieId = tempMovie.id;
