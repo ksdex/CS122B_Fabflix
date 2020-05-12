@@ -1,30 +1,30 @@
-1 2020-05-12 04:10:33 Start writing MoviesRecord.
-2 2020-05-12 04:10:33 Error: dataClass.MovieRecordClass: Z0220 | Romeo and Juliet | 1908 | Unknown2 -> Duplicate entries.
-3 2020-05-12 04:10:33 Error: dataClass.MovieRecordClass: Z0230 | Romeo and Juliet | 1908 | Unknown2 -> Duplicate entries.
-4 2020-05-12 04:10:33 Error: dataClass.MovieRecordClass: Z0250 | Romeo and Juliet | 1911 | Unknown2 -> Duplicate entries.
-5 2020-05-12 04:10:33 Error: dataClass.MovieRecordClass: Z0270 | Romeo and Juliet | 1916 | Unknown2 -> Duplicate entries.
-6 2020-05-12 04:10:33 Error: dataClass.MovieRecordClass: JuD11 | La Fin de Jour | 1939 | Duvivier -> Duplicate entries.
-7 2020-05-12 04:10:33 Error: dataClass.MovieRecordClass: GCt30 | The Rat | 1927 | Cutts -> Duplicate entries.
-8 2020-05-12 04:10:33 Error: dataClass.MovieRecordClass: FNm10 | Doctor Jack | 1922 | Newmeyer -> Duplicate entries.
-9 2020-05-12 04:10:33 Error: dataClass.MovieRecordClass: MLR25 | Waterloo Bridge | 1940 | M.LeRoy -> Duplicate entries.
-10 2020-05-12 04:10:33 Error: dataClass.MovieRecordClass: VrS40 | Evergreen | 1934 | V.Saville -> Duplicate entries.
-11 2020-05-12 04:10:33 Error: dataClass.MovieRecordClass: RdR64 | Topper Returns | 1941 | delRuth -> Duplicate entries.
-12 2020-05-12 04:10:33 Error: dataClass.MovieRecordClass: OP13 | Forever Amber | 1947 | Preminger -> Duplicate entries.
-13 2020-05-12 04:10:33 Error: dataClass.MovieRecordClass: PaJ2 | Ferry Pilot | 1941 | P.Jackson -> Duplicate entries.
-14 2020-05-12 04:10:33 Error: dataClass.MovieRecordClass: MiG7 | Crime Doctor's Strangest Case | 1943 | M.Gordon -> Duplicate entries.
-15 2020-05-12 04:10:33 Error: dataClass.MovieRecordClass: CoB1 | The Seventh Veil | 1945 | Bennett -> Duplicate entries.
-16 2020-05-12 04:10:33 Error: dataClass.MovieRecordClass: NR1 | They Live By Night | 1947 | N.Ray -> Duplicate entries.
-17 2020-05-12 04:10:33 Error: dataClass.MovieRecordClass: Z04120 | As Young as You Feel | 1951 | Unknown4 -> Duplicate entries.
-18 2020-05-12 04:10:33 Error: dataClass.MovieRecordClass: CMk30 | The Koumiko Mystery | 1965 | Marker -> Duplicate entries.
-19 2020-05-12 04:10:33 Error: dataClass.MovieRecordClass: JaS13 | The Dark Pool | 1963 | Smight -> Duplicate entries.
-20 2020-05-12 04:10:33 Error: dataClass.MovieRecordClass: KRu25 | Rainbow | 1989 | K.Russell -> Duplicate entries.
-21 2020-05-12 04:10:33 Error: dataClass.MovieRecordClass: RWF7 | The American Soldier | 1970 | Fassbinder -> Duplicate entries.
-22 2020-05-12 04:10:33 Error: dataClass.MovieRecordClass: FOR12 | Scream Queen Hot Tub Party | 1984 | F.O.Ray -> Duplicate entries.
-23 2020-05-12 04:10:33 Error: dataClass.MovieRecordClass: PAl4 | Matador | 1985 | Almodovar -> Duplicate entries.
-24 2020-05-12 04:10:33 Error: dataClass.MovieRecordClass: BLe5 | Tin Men | 1987 | B.Levinson -> Duplicate entries.
-25 2020-05-12 04:10:33 Error: dataClass.MovieRecordClass: KaK10 | Another Way | 1982 | ? [Makk -> Duplicate entries.
-26 2020-05-12 04:10:33 Error: dataClass.MovieRecordClass: LeN10 | The Good Mother | 1988 | Nimoy -> Duplicate entries.
-27 2020-05-12 04:10:33 Error: dataClass.MovieRecordClass: BS6 | For Love or Money | 1993 | Sonnenfeld -> Duplicate entries.
-28 2020-05-12 04:10:33 Error: dataClass.MovieRecordClass: NtB10 | On the Ropes | 1999 | Burstein -> Duplicate entries.
-29 2020-05-12 04:10:33 Error: dataClass.MovieRecordClass: PSv10 | Metroland | 1999 | P.Saville -> Duplicate entries.
-30 2020-05-12 04:10:33 Finish writing MoviesRecord.
+1 2020-05-12 04:51:58 Start writing MoviesRecord.
+2 2020-05-12 04:51:58 Error: dataClass.MovieRecordClass: Z0220 | Romeo and Juliet | 1908 | Unknown2 -> Duplicate entries.
+3 2020-05-12 04:51:58 Error: dataClass.MovieRecordClass: Z0230 | Romeo and Juliet | 1908 | Unknown2 -> Duplicate entries.
+4 2020-05-12 04:51:58 Error: dataClass.MovieRecordClass: Z0250 | Romeo and Juliet | 1911 | Unknown2 -> Duplicate entries.
+5 2020-05-12 04:51:58 Error: dataClass.MovieRecordClass: Z0270 | Romeo and Juliet | 1916 | Unknown2 -> Duplicate entries.
+6 2020-05-12 04:51:58 Error: dataClass.MovieRecordClass: JuD11 | La Fin de Jour | 1939 | Duvivier -> Duplicate entries.
+7 2020-05-12 04:51:58 Error: dataClass.MovieRecordClass: GCt30 | The Rat | 1927 | Cutts -> Duplicate entries.
+8 2020-05-12 04:51:58 Error: dataClass.MovieRecordClass: FNm10 | Doctor Jack | 1922 | Newmeyer -> Duplicate entries.
+9 2020-05-12 04:51:58 Error: dataClass.MovieRecordClass: MLR25 | Waterloo Bridge | 1940 | M.LeRoy -> Duplicate entries.
+10 2020-05-12 04:51:58 Error: dataClass.MovieRecordClass: VrS40 | Evergreen | 1934 | V.Saville -> Duplicate entries.
+11 2020-05-12 04:51:58 Error: dataClass.MovieRecordClass: RdR64 | Topper Returns | 1941 | delRuth -> Duplicate entries.
+12 2020-05-12 04:51:58 Error: dataClass.MovieRecordClass: OP13 | Forever Amber | 1947 | Preminger -> Duplicate entries.
+13 2020-05-12 04:51:58 Error: dataClass.MovieRecordClass: PaJ2 | Ferry Pilot | 1941 | P.Jackson -> Duplicate entries.
+14 2020-05-12 04:51:58 Error: dataClass.MovieRecordClass: MiG7 | Crime Doctor's Strangest Case | 1943 | M.Gordon -> Duplicate entries.
+15 2020-05-12 04:51:58 Error: dataClass.MovieRecordClass: CoB1 | The Seventh Veil | 1945 | Bennett -> Duplicate entries.
+16 2020-05-12 04:51:58 Error: dataClass.MovieRecordClass: NR1 | They Live By Night | 1947 | N.Ray -> Duplicate entries.
+17 2020-05-12 04:51:58 Error: dataClass.MovieRecordClass: Z04120 | As Young as You Feel | 1951 | Unknown4 -> Duplicate entries.
+18 2020-05-12 04:51:58 Error: dataClass.MovieRecordClass: CMk30 | The Koumiko Mystery | 1965 | Marker -> Duplicate entries.
+19 2020-05-12 04:51:58 Error: dataClass.MovieRecordClass: JaS13 | The Dark Pool | 1963 | Smight -> Duplicate entries.
+20 2020-05-12 04:51:58 Error: dataClass.MovieRecordClass: KRu25 | Rainbow | 1989 | K.Russell -> Duplicate entries.
+21 2020-05-12 04:51:58 Error: dataClass.MovieRecordClass: RWF7 | The American Soldier | 1970 | Fassbinder -> Duplicate entries.
+22 2020-05-12 04:51:58 Error: dataClass.MovieRecordClass: FOR12 | Scream Queen Hot Tub Party | 1984 | F.O.Ray -> Duplicate entries.
+23 2020-05-12 04:51:58 Error: dataClass.MovieRecordClass: PAl4 | Matador | 1985 | Almodovar -> Duplicate entries.
+24 2020-05-12 04:51:58 Error: dataClass.MovieRecordClass: BLe5 | Tin Men | 1987 | B.Levinson -> Duplicate entries.
+25 2020-05-12 04:51:58 Error: dataClass.MovieRecordClass: KaK10 | Another Way | 1982 | ? [Makk -> Duplicate entries.
+26 2020-05-12 04:51:58 Error: dataClass.MovieRecordClass: LeN10 | The Good Mother | 1988 | Nimoy -> Duplicate entries.
+27 2020-05-12 04:51:58 Error: dataClass.MovieRecordClass: BS6 | For Love or Money | 1993 | Sonnenfeld -> Duplicate entries.
+28 2020-05-12 04:51:58 Error: dataClass.MovieRecordClass: NtB10 | On the Ropes | 1999 | Burstein -> Duplicate entries.
+29 2020-05-12 04:51:58 Error: dataClass.MovieRecordClass: PSv10 | Metroland | 1999 | P.Saville -> Duplicate entries.
+30 2020-05-12 04:51:58 Finish writing MoviesRecord.

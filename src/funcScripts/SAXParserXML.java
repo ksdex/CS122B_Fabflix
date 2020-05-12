@@ -90,17 +90,9 @@ public class SAXParserXML {
                     "(starId,movieId)";
 
 
-            PreparedStatement statementInput = dbcon.prepareStatement(inputQuery);
-            int rsInt = statementInput.executeUpdate();
-            if (rsInt != 1) {
-                HelperFunc.xmlHandlerLog("Error: Fail to write to database.");
-            }
-
-            /*
             FileWriter fwSQL = new FileWriter("./src/funcScripts/logs/insertStarsRecord.sql");
             fwSQL.write(inputQuery + ";\n\n");
             fwSQL.close();
-             */
 
 
         } catch (SAXException se) {
@@ -256,31 +248,17 @@ public class SAXParserXML {
                         "director = nullif(@director,\"\");";
 
 
-                PreparedStatement statementInput = dbcon.prepareStatement(inputQuery);
-                int rsInt = statementInput.executeUpdate();
-                if (rsInt != 1) {
-                    HelperFunc.xmlHandlerLog("Error: Fail to write to database.");
-                }
-
-                inputQuery += "load data local infile 'RatingRecordData.txt'\n" +
+                inputQuery += "\n\nload data local infile 'RatingRecordData.txt'\n" +
                         "into table ratings\n" +
                         "fields terminated by '|' optionally enclosed by '\"' escaped by '\"'\n" +
                         "lines terminated by '[]'" + // '\\r\\n'\n" +
                         "(movieId,rating,numVotes)";
 
-                statementInput = dbcon.prepareStatement(inputQuery);
-                rsInt = statementInput.executeUpdate();
-                if (rsInt != 1) {
-                    HelperFunc.xmlHandlerLog("Error: Fail to write to database.");
-                }
-
                 HelperFunc.printToConsole(inputQuery);
 
-                /*
                 FileWriter fwSQL = new FileWriter("./src/funcScripts/logs/insertMovieRecord.sql");
                 fwSQL.write(inputQuery + ";\n\n");
                 fwSQL.close();
-                 */
 
                 /*
                 PreparedStatement statementInput = dbcon.prepareStatement(inputQuery);
@@ -299,7 +277,7 @@ public class SAXParserXML {
         }
     }
 
-
+    /*
     private void writeMovieRecord(){
         try {
             HelperFunc.initializeLogFile("MovieRecordWriter");
@@ -354,7 +332,7 @@ public class SAXParserXML {
             e.printStackTrace();
         }
     }
-
+    */
 
     private void updateMovieMap(String movieId, String movieTitle, String sqlId){
         if(movieId == null) {
@@ -391,6 +369,10 @@ public class SAXParserXML {
             String selectAllGenreQuery = "select * from genres";
             String checkDuplicateQuery = "select * from genres_in_movies where genreId = ? and movieId = ?";
 
+            File f = new File("./src/funcScripts/logs/GenreInMoviesRecordData.txt");
+            FileWriter fw = new FileWriter(f);
+            StringBuffer str = new StringBuffer();
+            String line = "[]"; //System.getProperty("line.separator");
 
             // Select all genres
             PreparedStatement statement = dbcon.prepareStatement(selectAllGenreQuery);
@@ -453,24 +435,40 @@ public class SAXParserXML {
                 }
 
                 // Insert into genres_in_movie
-                PreparedStatement statementInsertGenreInMovie = dbcon.prepareStatement(insertGenreInMovieQuery);
-                statementInsertGenreInMovie.setInt(1, genreSQLMap.get(genreName));
+                // PreparedStatement statementInsertGenreInMovie = dbcon.prepareStatement(insertGenreInMovieQuery);
+                // statementInsertGenreInMovie.setInt(1, genreSQLMap.get(genreName));
                 // HelperFunc.printToConsole(currentRecord.movieId);
                 // HelperFunc.printToConsole(currentRecord.movieName);
                 String movieSQLId = getMovieSQLId(currentRecord.movieId, currentRecord.movieName);
                 // HelperFunc.printToConsole(movieIdXMLSQLMap);
                 // HelperFunc.printToConsole(movieSQLId);
                 if(movieSQLId != null) {
+                    /*
                     statementInsertGenreInMovie.setString(2, movieSQLId);
                     int retID = statementInsertGenreInMovie.executeUpdate();
                     if (retID == 0) {
                         HelperFunc.xmlHandlerLog("Error: " + currentRecord.toString() + " -> Fail to insert into genres_in_movie movies.");
                     }
+                    */
+                    str.append(genreSQLMap.get(genreName) + "|" + movieSQLId).append(line);
+                    fw.write(str.toString());
                 }
                 else{
                     HelperFunc.xmlHandlerLog("Error: " + currentRecord.toString() + " -> Fail to insert into genres_in_movie movies.");
                 }
             }
+            fw.close();
+
+            String inputQuery = "load data local infile 'GenreInMoviesRecordData.txt'\n" +
+                    "into table genres_in_movies\n" +
+                    "fields terminated by '|' optionally enclosed by '\"' escaped by '\"'\n" +
+                    "lines terminated by '[]'" + // '\\r\\n'\n" +
+                    "(genreId,movieId)";
+
+            FileWriter fwSQL = new FileWriter("./src/funcScripts/logs/insertGenreInMovieRecord.sql");
+            fwSQL.write(inputQuery + ";\n\n");
+            fwSQL.close();
+
             HelperFunc.xmlHandlerLog("Finish writing GenresInMoviesRecord.");
             HelperFunc.closeLogFile();
         }
