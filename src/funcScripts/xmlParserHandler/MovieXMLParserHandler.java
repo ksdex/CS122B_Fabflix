@@ -69,6 +69,9 @@ public class MovieXMLParserHandler  extends DefaultHandler {
 
 
 
+
+
+
     public void endElement(String uri, String localName, String qName) throws SAXException {
         if(qName.equalsIgnoreCase("dirname")) {
             HelperFunc.printToConsole("Director: " + tempVal);

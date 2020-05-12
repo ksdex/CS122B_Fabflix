@@ -178,10 +178,10 @@ public class SAXParserXML {
             int maxMovieId = getMaxId(movieIdQuery);
             int nextMovieId = maxMovieId + 1;
 
-            // File f = new File("C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/MovieRecordData.txt");
-            File f = new File("./src/funcScripts/logs/MovieRecordData.txt");
+            File f = new File("C://ProgramData//MySQL//MySQL Server 8.0//Uploads//MovieRecordData.txt");
+            // File f = new File("./src/funcScripts/logs/MovieRecordData.txt");
             FileWriter fw = new FileWriter(f);
-            String filepathMovieRecord = f.getCanonicalPath();
+            String filepathMovieRecord = "C:///ProgramData///MySQL///MySQL Server 8.0///Uploads///MovieRecordData.txt";
             HelperFunc.printToConsole(filepathMovieRecord);
             for(int i = 0; i < movieRecord.size(); i++) {
                 // Check duplication
@@ -198,7 +198,7 @@ public class SAXParserXML {
                 else{
                     String sqlId = getId("tt", 7, nextMovieId);
                     movieMap.put(currentKey, sqlId);
-                    str.append(sqlId + "," + currentRecord.title + "," + currentRecord.year + "," + currentRecord.director).append(line);
+                    str.append(sqlId + "|" + currentRecord.title + "|" + currentRecord.year + "|" + currentRecord.director).append(line);
                     //str.append("tt"+nextMovieId + "," + newmovieElement.get(0) + "," + newmovieElement.get(1) + "," +
                     //            newmovieElement.get(2)
                     //          ).append(line);
@@ -213,7 +213,7 @@ public class SAXParserXML {
                 //here should write the whole file into the database
                 String inputQuery = "load data infile '" + filepathMovieRecord + "'\n" +
                         "into table movies\n" +
-                        "fields terminated by ',' optionally enclosed by '\"' escaped by '\"'\n" +
+                        "fields terminated by '|' optionally enclosed by '\"' escaped by '\"'\n" +
                         "lines terminated by '\\r\\n'\n" +
                         "(id,@title,@year,@director)\n" +
                         "set\n" +
