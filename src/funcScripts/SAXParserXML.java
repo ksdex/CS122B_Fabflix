@@ -86,7 +86,7 @@ public class SAXParserXML {
             String inputQuery = "load data local infile 'StarsInMoviesRecordData.txt'\n" +
                     "into table stars_in_movies\n" +
                     "fields terminated by '|' optionally enclosed by '\"' escaped by '\"'\n" +
-                    "lines terminated by '\\r\\n'\n" +
+                    "lines terminated by '[]'" + // '\\r\\n'\n" +
                     "(starId,movieId)";
 
             FileWriter fwSQL = new FileWriter("./src/funcScripts/logs/insertStarsRecord.sql");
@@ -193,19 +193,23 @@ public class SAXParserXML {
             String movieIdQuery = "select max(id) as maxId from movies";
             int maxMovieId = getMaxId(movieIdQuery);
             int nextMovieId = maxMovieId + 1;
+            System.out.println(nextMovieId);
 
             // File f1 = new File("C://ProgramData//MySQL//MySQL Server 8.0//Uploads//MovieRecordData.txt");
             File f = new File("./src/funcScripts/logs/MovieRecordData.txt");
+            File f2 = new File("./src/funcScripts/logs/RatingRecordData.txt");
             FileWriter fw = new FileWriter(f);
+            FileWriter fw2 = new FileWriter(f2);
             // FileWriter fw2 = new FileWriter(f2);
-            String filepathMovieRecord = "C:///ProgramData///MySQL///MySQL Server 8.0///Uploads///MovieRecordData.txt";
-            HelperFunc.printToConsole(filepathMovieRecord);
+            // String filepathMovieRecord = "C:///ProgramData///MySQL///MySQL Server 8.0///Uploads///MovieRecordData.txt";
+            // HelperFunc.printToConsole(filepathMovieRecord);
             for(int i = 0; i < movieRecord.size(); i++) {
                 // Check duplication
                 MovieRecordClass currentRecord = movieRecord.get(i);
                 String currentKey = getMovieSQLMapKey(currentRecord.title, Integer.toString(currentRecord.year), currentRecord.director);
-                String line = System.getProperty("line.separator");
+                String line = "[]"; //System.getProperty("line.separator");
                 StringBuffer str = new StringBuffer();
+                StringBuffer str2 = new StringBuffer();
                 // If duplicate
                 if(movieMap.containsKey(currentKey)){
                     HelperFunc.xmlHandlerLog("Error: " + currentRecord.toString() + " -> Duplicate entries.");
@@ -216,29 +220,37 @@ public class SAXParserXML {
                     String sqlId = getId("tt", 7, nextMovieId);
                     movieMap.put(currentKey, sqlId);
                     str.append(sqlId + "|" + currentRecord.title + "|" + currentRecord.year + "|" + currentRecord.director).append(line);
+                    str2.append(sqlId + "|0|0").append(line);
                     //str.append("tt"+nextMovieId + "," + newmovieElement.get(0) + "," + newmovieElement.get(1) + "," +
                     //            newmovieElement.get(2)
                     //          ).append(line);
                     fw.write(str.toString());
+                    fw2.write(str2.toString());
                     // fw2.write(str.toString());
                     nextMovieId++;
                 }
             }
             // After checking is down, put the data into sql database
             fw.close();
-            // fw2.close();
+            fw2.close();
             movieMap = null; // release memory
             if(nextMovieId != maxMovieId + 1) {
                 //here should write the whole file into the database
                 String inputQuery = "load data local infile 'MovieRecordData.txt'\n" +
                         "into table movies\n" +
                         "fields terminated by '|' optionally enclosed by '\"' escaped by '\"'\n" +
-                        "lines terminated by '\\r\\n'\n" +
+                        "lines terminated by '[]'" + // '\\r\\n'\n" +
                         "(id,@title,@year,@director)\n" +
                         "set\n" +
                         "title = nullif(@title,\"\"),\n" +
                         "year = nullif(@year,\"\"),\n" +
                         "director = nullif(@director,\"\")";
+
+                inputQuery += ";\n\n" + "load data local infile 'RatingRecordData.txt'\n" +
+                        "into table ratings\n" +
+                        "fields terminated by '|' optionally enclosed by '\"' escaped by '\"'\n" +
+                        "lines terminated by '[]'" + // '\\r\\n'\n" +
+                        "(movieId,rating,numVotes)";
 
                 HelperFunc.printToConsole(inputQuery);
 
@@ -272,7 +284,7 @@ public class SAXParserXML {
             String movieIdQuery = "select max(id) as maxId from movies";
             String checkDuplicateQuery = "select * from movies where title = ? and year = ? and director = ?";
             String insertRatingQuery = "Insert into ratings values(?, 0, 0)";
-            int nextMovieId = getMaxId(movieIdQuery);
+            int nextMovieId = getMaxId(movieIdQuery) + 1;
 
             for(int i = 0; i < movieRecord.size(); i++) {
                 // Check duplication
