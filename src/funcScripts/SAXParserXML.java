@@ -1,5 +1,6 @@
 package funcScripts;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.*;
@@ -11,7 +12,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import com.mysql.jdbc.SocketMetadata;
 import dataClass.*;
 import org.xml.sax.SAXException;
 import funcScripts.xmlParserHandler.MovieXMLParserHandler;
@@ -57,7 +57,9 @@ public class SAXParserXML {
             spMovie.parse("./data/mains243.xml", movieHandler);
             movieRecord = movieHandler.getMovieRecordList();
             genresInMoviesRecord = movieHandler.getGenresInMoviesRecord();
-            writeMovieRecord();
+            writeMovieRecord2();
+
+            /*
             writeGenresInMovieRecord();
 
 
@@ -83,6 +85,7 @@ public class SAXParserXML {
             spStarInMovie.parse("./data/casts124.xml", starsInMovieHandler);
             starsInMoviesRecord = starsInMovieHandler.getStarsInMovieRecordList();
             writeStarsInMovieRecord();
+            */
 
         } catch (SAXException se) {
             se.printStackTrace();
@@ -116,72 +119,116 @@ public class SAXParserXML {
         return prefix + r;
     }
 
-    private void wirteMovieRecord2(){
-        try {
-            HelperFunc.initializeLogFile("MovieRecordWriter");
-            HelperFunc.xmlHandlerLog("Start writing MoviesRecord.");
-            String getallQuery = "select * from movies";
-            Map<Integer,List<String>> moviemap=new HashMap<Integer, List<String>>();
-            Statement allmovieStatement = dbcon.createStatement();
-            ResultSet allmovies = allmovieStatement.executeQuery(getallQuery);
-            while(allmovies.next()){
-                List<String> movieElements = new ArrayList<>();
-                movieElements.add(allmovies.getString("title"));
-                movieElements.add(allmovies.getString("year"));
-                movieElements.add(allmovies.getString("director"));
-                String id = allmovies.getString("id");
-                moviemap.put(Integer.parseInt(id.substring(2,id.length())),movieElements);//get the number after tt as int
-            }
-            allmovies.close();
-            allmovieStatement.close();
-            String movieIdQuery = "select max(id) as maxId from movies";
-            PreparedStatement statement0 = dbcon.prepareStatement(movieIdQuery);
-            ResultSet rs0 = statement0.executeQuery();
-            int nextMovieId = -1;
-            if(rs0.next()) {
-                String id = rs0.getString("maxId");
-                HelperFunc.printToConsole(id);
-                nextMovieId = Integer.parseInt(id.substring(2, id.length())) + 1;
+
+    private String getMovieSQLMapKey(String title, String year, String director){
+        return title + "|" + year + "|" + director;
+    }
+
+
+    private Map<String, String> getCurrentSQLMovieMap() throws SQLException {
+        String getallQuery = "select * from movies";
+        Map<String, String> moviemap = new HashMap<>(); // title|year|director : movieId
+        Statement allmovieStatement = dbcon.createStatement();
+        ResultSet allmovies = allmovieStatement.executeQuery(getallQuery);
+        while(allmovies.next()){
+            String key = getMovieSQLMapKey(allmovies.getString("title"),
+                    allmovies.getString("year"),
+                    allmovies.getString("director"));
+            String id = allmovies.getString("id");
+            moviemap.put(key, id);
+        }
+        allmovies.close();
+        allmovieStatement.close();
+
+        return moviemap;
+    }
+
+
+    private int getMaxId(String query) throws SQLException {
+        PreparedStatement statement0 = dbcon.prepareStatement(query);
+        ResultSet rs0 = statement0.executeQuery();
+        int nextMovieId = -1;
+        if(rs0.next()) {
+            String id = rs0.getString("maxId");
+            HelperFunc.printToConsole(id);
+            if(id != null) {
+                nextMovieId = Integer.parseInt(id.substring(2, id.length()));
                 HelperFunc.printToConsole(nextMovieId);
             }
-            rs0.close();
-            statement0.close();
-            FileWriter fw = new FileWriter("C:\\Users\\wym12\\Documents\\Java_projects\\CS199\\building_average_60min.txt",true);
+            else{
+                nextMovieId = 0;
+            }
+        }
+        else{
+            nextMovieId = 0;
+        }
+        rs0.close();
+        statement0.close();
+        return nextMovieId;
+    }
+
+
+
+    private void writeMovieRecord2(){
+        try {
+            HelperFunc.initializeLogFile("MovieRecordWriter2");
+            HelperFunc.xmlHandlerLog("Start writing MoviesRecord.");
+            Map<String, String> movieMap = getCurrentSQLMovieMap();
+            String movieIdQuery = "select max(id) as maxId from movies";
+            int maxMovieId = getMaxId(movieIdQuery);
+            int nextMovieId = maxMovieId + 1;
+
+            // File f = new File("C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/MovieRecordData.txt");
+            File f = new File("./src/funcScripts/logs/MovieRecordData.txt");
+            FileWriter fw = new FileWriter(f);
+            String filepathMovieRecord = f.getCanonicalPath();
+            HelperFunc.printToConsole(filepathMovieRecord);
             for(int i = 0; i < movieRecord.size(); i++) {
                 // Check duplication
                 MovieRecordClass currentRecord = movieRecord.get(i);
-                List<String> newmovieElement = new ArrayList<>();
-                newmovieElement.add(currentRecord.title);
-                newmovieElement.add(String.valueOf(currentRecord.year));
-                newmovieElement.add(currentRecord.director);
+                String currentKey = getMovieSQLMapKey(currentRecord.title, Integer.toString(currentRecord.year), currentRecord.director);
                 String line = System.getProperty("line.separator");
                 StringBuffer str = new StringBuffer();
-                if(moviemap.containsValue(newmovieElement)){
-                    //what to do here?
-//                    String sqlId = rs1.getString("id");
-//                    updateMovieMap(currentRecord.id, currentRecord.title, sqlId);
-//                    HelperFunc.xmlHandlerLog("Error: " + currentRecord.toString() + " -> Duplicate entries.");
+                // If duplicate
+                if(movieMap.containsKey(currentKey)){
+                    HelperFunc.xmlHandlerLog("Error: " + currentRecord.toString() + " -> Duplicate entries.");
+                    continue;
                 }
                 // If no duplication, then write into a file
                 else{
-                    moviemap.put(nextMovieId,newmovieElement);
-                    str.append("tt"+nextMovieId+","+newmovieElement.get(0)+","+newmovieElement.get(1)+","+newmovieElement.get(2)).append(line);
+                    String sqlId = getId("tt", 7, nextMovieId);
+                    movieMap.put(currentKey, sqlId);
+                    str.append(sqlId + "," + currentRecord.title + "," + currentRecord.year + "," + currentRecord.director).append(line);
+                    //str.append("tt"+nextMovieId + "," + newmovieElement.get(0) + "," + newmovieElement.get(1) + "," +
+                    //            newmovieElement.get(2)
+                    //          ).append(line);
                     fw.write(str.toString());
                     nextMovieId++;
                 }
             }
+            // After checking is down, put the data into sql database
             fw.close();
-            moviemap = null;//release memory
-            //here should write the whole file into the database
-            String inputQuery = "load data infile 'datafilepath here'\n" +
-                    "into table movies\n" +
-                    "fields terminated by ',' optionally enclosed by '\"' escaped by '\"'\n" +
-                    "lines terminated by '\\r\\n'\n" +
-                    "(id,@title,@year,@director)\n" +
-                    "set\n" +
-                    "title = nullif(@title,\"\"),\n"+
-                    "building_id = nullif(@building_id,\"\"),\n" +
-                    "floor_id = nullif(@floor_id,\"\")";
+            movieMap = null; // release memory
+            if(nextMovieId != maxMovieId + 1) {
+                //here should write the whole file into the database
+                String inputQuery = "load data infile '" + filepathMovieRecord + "'\n" +
+                        "into table movies\n" +
+                        "fields terminated by ',' optionally enclosed by '\"' escaped by '\"'\n" +
+                        "lines terminated by '\\r\\n'\n" +
+                        "(id,@title,@year,@director)\n" +
+                        "set\n" +
+                        "title = nullif(@title,\"\"),\n" +
+                        "year = nullif(@year,\"\"),\n" +
+                        "director = nullif(@director,\"\")";
+
+                HelperFunc.printToConsole(inputQuery);
+
+                PreparedStatement statementInput = dbcon.prepareStatement(inputQuery);
+                int rsInt = statementInput.executeUpdate();
+                if (rsInt != 1) {
+                    HelperFunc.xmlHandlerLog("Error: Fail to write to database.");
+                }
+            }
 
             HelperFunc.xmlHandlerLog("Finish writing MoviesRecord.");
             HelperFunc.closeLogFile();
@@ -200,17 +247,8 @@ public class SAXParserXML {
             String movieIdQuery = "select max(id) as maxId from movies";
             String checkDuplicateQuery = "select * from movies where title = ? and year = ? and director = ?";
             String insertRatingQuery = "Insert into ratings values(?, 0, 0)";
-            int nextMovieId = -1;
-            PreparedStatement statement0 = dbcon.prepareStatement(movieIdQuery);
-            ResultSet rs0 = statement0.executeQuery();
-            if(rs0.next()) {
-                String id = rs0.getString("maxId");
-                HelperFunc.printToConsole(id);
-                nextMovieId = Integer.parseInt(id.substring(2, id.length())) + 1;
-                HelperFunc.printToConsole(nextMovieId);
-            }
-            rs0.close();
-            statement0.close();
+            int nextMovieId = getMaxId(movieIdQuery);
+
             for(int i = 0; i < movieRecord.size(); i++) {
                 // Check duplication
                 MovieRecordClass currentRecord = movieRecord.get(i);
@@ -382,17 +420,8 @@ public class SAXParserXML {
             HelperFunc.xmlHandlerLog("Start writing StarRecordWriter.");
             String insertQuery = "Insert into stars values(?, ?, ?)";
             String starIdQuery = "select max(id) as maxId from stars";
-            int nextStarId = -1;
-            PreparedStatement statement0 = dbcon.prepareStatement(starIdQuery);
-            ResultSet rs0 = statement0.executeQuery();
-            if(rs0.next()) {
-                String id = rs0.getString("maxId");
-                HelperFunc.printToConsole(id);
-                nextStarId = Integer.parseInt(id.substring(2, id.length())) + 1;
-                HelperFunc.printToConsole(nextStarId);
-            }
-            rs0.close();
-            statement0.close();
+            int nextStarId = getMaxId(starIdQuery);
+
             for(int i = 0; i < starsRecord.size(); i++) {
                 StarsRecordClass currentRecord = starsRecord.get(i);
                 PreparedStatement statement2 = dbcon.prepareStatement(insertQuery);
@@ -505,8 +534,10 @@ public class SAXParserXML {
 
     public static void main(String[] args) {
         try {
+            System.out.println(HelperFunc.getCurrentDate(true) + ": Begin Parsing.");
             SAXParserXML spx = new SAXParserXML();
             spx.run();
+            System.out.println(HelperFunc.getCurrentDate(true) + ": End Parsing.");
         } catch (SQLException e) {
             e.printStackTrace();
         }

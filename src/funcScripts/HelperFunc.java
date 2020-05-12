@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HelperFunc {
-    static boolean debugMode = false;
+    static boolean debugMode = true;
 
     static public void printToConsole(Object tar){
         if(debugMode){
@@ -25,6 +25,17 @@ public class HelperFunc {
         }
     }
 
+    static public String getCurrentDate(boolean hasTime){
+        java.util.Date day = new Date();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat df_time = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        if(hasTime){
+            return df_time.format(day);
+        }
+        else{
+            return df.format(day);
+        }
+    }
 
     public static FileWriter fw = null;
     public static int logLineCount = 1;
@@ -170,9 +181,7 @@ public class HelperFunc {
 
 
     static public void initializeLogFile(String fileName){
-        java.util.Date day = new Date();
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        String d = df.format(day);
+        String d = getCurrentDate(false);
         String logFilePath = "./src/funcScripts/logs/log_" + d + "_" + fileName + ".log";
         File logFile = new File(logFilePath);
         try{
@@ -186,9 +195,7 @@ public class HelperFunc {
 
     static public void xmlHandlerLog(Object tar){
         try{
-            java.util.Date day = new Date();
-            SimpleDateFormat df_time = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-            String d = df_time.format(day);
+            String d = getCurrentDate(true);
             fw.write(Integer.toString(logLineCount) + " " + d + " " + tar.toString() + "\n");
             logLineCount++;
             fw.flush();
