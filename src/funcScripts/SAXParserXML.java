@@ -59,8 +59,8 @@ public class SAXParserXML {
             writeMovieRecord2();
             writeGenresInMovieRecord();
 
-            movieRecord = null;
-            genresInMoviesRecord = null;
+            movieRecord.clear();
+            genresInMoviesRecord.clear();
 
 
             // Star XML
@@ -73,8 +73,7 @@ public class SAXParserXML {
             spStar.parse("./data/actors63.xml", starHandler);
             starsRecord = starHandler.getStarsRecordList();
             writeStarsRecord();
-
-            starsRecord = null;
+            starsRecord.clear();
 
             // Stars In Movie XML
             // get a factory
@@ -82,6 +81,9 @@ public class SAXParserXML {
             //get a new instance of parser
             SAXParser spStarInMovie = spfStarInMovie.newSAXParser();
             funcScripts.xmlParserHandler.StarsInMoviesParserHandler starsInMovieHandler  = new funcScripts.xmlParserHandler.StarsInMoviesParserHandler(starNameSQLIdMap, movieIdXMLSQLMap, movieTitleSQLMap);
+            starNameSQLIdMap = null;
+            movieIdXMLSQLMap = null;
+            movieTitleSQLMap = null;
             //parse the file and also register this class for call backs
             spStarInMovie.parse("./data/casts124.xml", starsInMovieHandler);
 
