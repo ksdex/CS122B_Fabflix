@@ -25,9 +25,6 @@ public class MovieXMLParserHandler  extends DefaultHandler {
 
     private int movieRecordCount = 0;
 
-    // Create a dataSource which registered in web.xml
-    private Connection dbcon = null;
-
 
     public List<MovieRecordClass> getMovieRecordList(){
         return movieRecord;
@@ -38,45 +35,6 @@ public class MovieXMLParserHandler  extends DefaultHandler {
         return genresInMoviesRecord;
     }
 
-    /*
-     private void initializeDatabaseConnection() throws SQLException{
-        dbcon = DriverManager.getConnection("jdbc:mysql" + ":///" + "moviedb" + "?autoReconnect=true&useSSL=false",
-                "mytestuser", "mypassword");
-    }
-     */
-
-    /*
-    private void closeDatabaseConnection() throws SQLException {
-        dbcon.close();
-    }
-    */
-
-
-    /*
-    private int getMaxId(String query) throws SQLException {
-        PreparedStatement statement0 = dbcon.prepareStatement(query);
-        ResultSet rs0 = statement0.executeQuery();
-        int nextMovieId = -1;
-        if(rs0.next()) {
-            String id = rs0.getString("maxId");
-            HelperFunc.printToConsole(id);
-            if(id != null) {
-                nextMovieId = Integer.parseInt(id.substring(2, id.length()));
-                HelperFunc.printToConsole(nextMovieId);
-            }
-            else{
-                nextMovieId = 0;
-            }
-        }
-        else{
-            nextMovieId = 0;
-        }
-        rs0.close();
-        statement0.close();
-        return nextMovieId;
-    }
-
-     */
 
     //Event Handlers
     public void startDocument() throws SAXException {

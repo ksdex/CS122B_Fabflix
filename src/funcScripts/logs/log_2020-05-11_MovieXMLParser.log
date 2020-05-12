@@ -1,11 +1,9 @@
-1 2020-05-11 08:49:51 Start parsing MovieXML.
-2 2020-05-11 08:49:51 Error: dataClass.MovieRecordClass: H8 | The Mountain Eagle | 0 | null -> Empty title: Fear O'God
-3 2020-05-11 08:49:51 Error: dataClass.MovieRecordClass: H9 | The Lodger: A Story of The London Fog | 0 | null -> Empty title: The Case of Jonathan Drew
-4 2020-05-11 08:49:51 Error: dataClass.MovieRecordClass: H10 | Downhill | 0 | null -> Empty title: When Boys Leave Home
-5 2020-05-11 08:49:51 Error: dataClass.MovieRecordClass: H22 | Rich and Strange | 0 | null -> Empty title: East of Shanghai
-6 2020-05-11 08:49:51 Error: dataClass.MovieRecordClass: H25 | Waltzes From Vienna | 0 | null -> Empty title: Strauss's Great Waltz
-7 2020-05-11 08:49:51 Error: dataClass.MovieRecordClass: H29 | Sabotage | 0 | null -> Empty title: The Woman Alone
-8 2020-05-11 08:49:51 Error: dataClass.MovieRecordClass: H30 | Young and Innocent | 0 | null -> Empty title: The Girl Was Young
-9 2020-05-11 08:49:51 Error: dataClass.MovieRecordClass: H47 | Stage Fright | 0 | null -> Empty title: Die rote Lola
-10 2020-05-11 08:49:52 Error: dataClass.MovieRecordClass: ALu5 | L'Arroseur arross\'e | 0 | null -> Empty title: The Gardener
-11 2020-05-11 08:49:52 Error: dataClass.MovieRecordClass: GMs1 | L'Escamontage d'une Dame | 0 | null -> Empty title: Une Partie de Cartes
+1 2020-05-11 08:57:15 Start parsing MovieXML.
+2 2020-05-11 08:57:15 Error: dataClass.MovieRecordClass: H8 | The Mountain Eagle | 0 | null -> Empty title: Fear O'God
+3 2020-05-11 08:57:15 Error: dataClass.MovieRecordClass: H9 | The Lodger: A Story of The London Fog | 0 | null -> Empty title: The Case of Jonathan Drew
+4 2020-05-11 08:57:15 Error: dataClass.MovieRecordClass: H10 | Downhill | 0 | null -> Empty title: When Boys Leave Home
+5 2020-05-11 08:57:16 Error: dataClass.MovieRecordClass: H22 | Rich and Strange | 0 | null -> Empty title: East of Shanghai
+6 2020-05-11 08:57:16 Error: dataClass.MovieRecordClass: H25 | Waltzes From Vienna | 0 | null -> Empty title: Strauss's Great Waltz
+7 2020-05-11 08:57:16 Error: dataClass.MovieRecordClass: H29 | Sabotage | 0 | null -> Empty title: The Woman Alone
+8 2020-05-11 08:57:16 Error: dataClass.MovieRecordClass: H30 | Young and Innocent | 0 | null -> Empty title: The Girl Was Young
+9 2020-05-11 08:57:16 Error: dataClass.MovieRecordClass: H47 | Stage Fright | 0 | null -> Empty title: Die rote Lola
