@@ -213,6 +213,7 @@ public class SAXParserXML {
                 StringBuffer str2 = new StringBuffer();
                 // If duplicate
                 if(movieMap.containsKey(currentKey)){
+                    updateMovieMap(currentRecord.id, currentRecord.title, movieMap.get(currentKey));
                     HelperFunc.xmlHandlerLog("Error: " + currentRecord.toString() + " -> Duplicate entries.");
                     continue;
                 }
@@ -220,6 +221,7 @@ public class SAXParserXML {
                 else{
                     String sqlId = getId("tt", 7, nextMovieId);
                     movieMap.put(currentKey, sqlId);
+                    updateMovieMap(currentRecord.id, currentRecord.title, sqlId);
                     str.append(sqlId + "|" + currentRecord.title + "|" + currentRecord.year + "|" + currentRecord.director).append(line);
                     str2.append(sqlId + "|0|0").append(line);
                     //str.append("tt"+nextMovieId + "," + newmovieElement.get(0) + "," + newmovieElement.get(1) + "," +
@@ -363,13 +365,13 @@ public class SAXParserXML {
             HelperFunc.initializeLogFile("GenresInMovieRecordWriter");
             HelperFunc.xmlHandlerLog("Start writing GenresInMoviesRecord.");
 
-            String insertGenreInMovieQuery = "Insert into genres_in_movies values(?, ?)";
+            // String insertGenreInMovieQuery = "Insert into genres_in_movies values(?, ?)";
             String insertGenreQuery = "Insert into genres (name) values (?)";
             String genreIdQuery = "select id from genres where name = ?";
             String selectAllGenreQuery = "select * from genres";
             String checkDuplicateQuery = "select * from genres_in_movies where genreId = ? and movieId = ?";
 
-            File f = new File("./src/funcScripts/logs/GenreInMoviesRecordData.txt");
+            File f = new File("./src/funcScripts/logs/GenreInMovieRecordData.txt");
             FileWriter fw = new FileWriter(f);
             StringBuffer str = new StringBuffer();
             String line = "[]"; //System.getProperty("line.separator");
