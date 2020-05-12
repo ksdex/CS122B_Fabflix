@@ -37,14 +37,14 @@ public class SAXParserXML {
     }
 
 
-    public void run() throws SQLException {
+    public void run() throws SQLException, IOException {
         initializeDatabaseConnection();
         parseDocumentAndWriteToDatabase();
         closeDatabaseConnection();
     }
 
 
-    private void parseDocumentAndWriteToDatabase() {
+    private void parseDocumentAndWriteToDatabase() throws IOException {
         try {
             // Movie XML
             //get a factory
@@ -92,7 +92,12 @@ public class SAXParserXML {
             pce.printStackTrace();
         } catch (IOException ie) {
             ie.printStackTrace();
+        } catch (Exception e){
+            FileWriter fwSQL = new FileWriter("./src/funcScripts/logs/errorLogs.sql");
+            fwSQL.write(e.toString() + ";\n\n");
+            fwSQL.close();
         }
+
     }
 
 
@@ -448,12 +453,16 @@ public class SAXParserXML {
                 else{
                     statement2.setNull(3, Types.INTEGER);
                 }
-                int retID = statement2.executeUpdate();
-                // HelperFunc.printToConsole(retID);
-                if(retID == 1) {
-                    nextStarId++;
+                try {
+                    int retID = statement2.executeUpdate();
+                    // HelperFunc.printToConsole(retID);
+                    if (retID == 1) {
+                        nextStarId++;
+                    } else {
+                        HelperFunc.xmlHandlerLog("Error: " + currentRecord.toString() + " -> Fail to insert into table stars.");
+                    }
                 }
-                else{
+                catch (Exception e){
                     HelperFunc.xmlHandlerLog("Error: " + currentRecord.toString() + " -> Fail to insert into table stars.");
                 }
             }
@@ -551,7 +560,7 @@ public class SAXParserXML {
             SAXParserXML spx = new SAXParserXML();
             spx.run();
             System.out.println(HelperFunc.getCurrentDate(true) + ": End Parsing.");
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

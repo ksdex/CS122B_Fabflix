@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HelperFunc {
-    static boolean debugMode = true;
+    static boolean debugMode = false;
 
     static public void printToConsole(Object tar){
         if(debugMode){

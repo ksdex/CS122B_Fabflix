@@ -105,6 +105,7 @@ public class StarsInMoviesParserHandler extends DefaultHandler  {
             if(recordIsValid) {
                 try {
                     writeStarsInMovieRecord2(tempStarsInMovieRecord);
+                    tempStarsInMovieRecord = null;
                     starsInMoviesRecordCount++;
                 }
                 catch(Exception e){
