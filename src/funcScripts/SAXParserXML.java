@@ -178,10 +178,10 @@ public class SAXParserXML {
             int maxMovieId = getMaxId(movieIdQuery);
             int nextMovieId = maxMovieId + 1;
 
-            File f1 = new File("C://ProgramData//MySQL//MySQL Server 8.0//Uploads//MovieRecordData.txt");
-            File f2 = new File("./src/funcScripts/logs/MovieRecordData.txt");
-            FileWriter fw = new FileWriter(f1);
-            FileWriter fw2 = new FileWriter(f2);
+            // File f1 = new File("C://ProgramData//MySQL//MySQL Server 8.0//Uploads//MovieRecordData.txt");
+            File f = new File("./src/funcScripts/logs/MovieRecordData.txt");
+            FileWriter fw = new FileWriter(f);
+            // FileWriter fw2 = new FileWriter(f2);
             String filepathMovieRecord = "C:///ProgramData///MySQL///MySQL Server 8.0///Uploads///MovieRecordData.txt";
             HelperFunc.printToConsole(filepathMovieRecord);
             for(int i = 0; i < movieRecord.size(); i++) {
@@ -204,13 +204,13 @@ public class SAXParserXML {
                     //            newmovieElement.get(2)
                     //          ).append(line);
                     fw.write(str.toString());
-                    fw2.write(str.toString());
+                    // fw2.write(str.toString());
                     nextMovieId++;
                 }
             }
             // After checking is down, put the data into sql database
             fw.close();
-            fw2.close();
+            // fw2.close();
             movieMap = null; // release memory
             if(nextMovieId != maxMovieId + 1) {
                 //here should write the whole file into the database
