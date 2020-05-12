@@ -181,8 +181,9 @@ public class HelperFunc {
 
 
     static public void initializeLogFile(String fileName){
-        File logDir = new File("/src/funcScripts/logs");
-        if( !logDir.exists() && !logDir.isDirectory()){
+        File logDir = new File("./src/funcScripts/logs");
+
+        if( !logDir.exists() ){
             logDir.mkdir();
         }
 

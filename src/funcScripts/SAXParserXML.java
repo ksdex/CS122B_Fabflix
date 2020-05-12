@@ -89,9 +89,18 @@ public class SAXParserXML {
                     "lines terminated by '[]'" + // '\\r\\n'\n" +
                     "(starId,movieId)";
 
+
+            PreparedStatement statementInput = dbcon.prepareStatement(inputQuery);
+            int rsInt = statementInput.executeUpdate();
+            if (rsInt != 1) {
+                HelperFunc.xmlHandlerLog("Error: Fail to write to database.");
+            }
+
+            /*
             FileWriter fwSQL = new FileWriter("./src/funcScripts/logs/insertStarsRecord.sql");
             fwSQL.write(inputQuery + ";\n\n");
             fwSQL.close();
+             */
 
 
         } catch (SAXException se) {
@@ -193,7 +202,7 @@ public class SAXParserXML {
             String movieIdQuery = "select max(id) as maxId from movies";
             int maxMovieId = getMaxId(movieIdQuery);
             int nextMovieId = maxMovieId + 1;
-            System.out.println(nextMovieId);
+            // System.out.println(nextMovieId);
 
             // File f1 = new File("C://ProgramData//MySQL//MySQL Server 8.0//Uploads//MovieRecordData.txt");
             File f = new File("./src/funcScripts/logs/MovieRecordData.txt");
@@ -244,19 +253,34 @@ public class SAXParserXML {
                         "set\n" +
                         "title = nullif(@title,\"\"),\n" +
                         "year = nullif(@year,\"\"),\n" +
-                        "director = nullif(@director,\"\")";
+                        "director = nullif(@director,\"\");";
 
-                inputQuery += ";\n\n" + "load data local infile 'RatingRecordData.txt'\n" +
+
+                PreparedStatement statementInput = dbcon.prepareStatement(inputQuery);
+                int rsInt = statementInput.executeUpdate();
+                if (rsInt != 1) {
+                    HelperFunc.xmlHandlerLog("Error: Fail to write to database.");
+                }
+
+                inputQuery += "load data local infile 'RatingRecordData.txt'\n" +
                         "into table ratings\n" +
                         "fields terminated by '|' optionally enclosed by '\"' escaped by '\"'\n" +
                         "lines terminated by '[]'" + // '\\r\\n'\n" +
                         "(movieId,rating,numVotes)";
 
+                statementInput = dbcon.prepareStatement(inputQuery);
+                rsInt = statementInput.executeUpdate();
+                if (rsInt != 1) {
+                    HelperFunc.xmlHandlerLog("Error: Fail to write to database.");
+                }
+
                 HelperFunc.printToConsole(inputQuery);
 
+                /*
                 FileWriter fwSQL = new FileWriter("./src/funcScripts/logs/insertMovieRecord.sql");
                 fwSQL.write(inputQuery + ";\n\n");
                 fwSQL.close();
+                 */
 
                 /*
                 PreparedStatement statementInput = dbcon.prepareStatement(inputQuery);

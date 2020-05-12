@@ -216,7 +216,7 @@ public class StarsInMoviesParserHandler extends DefaultHandler  {
                 // Insert into stars_in_movie
                 String line = "[]";// System.getProperty("line.separator");
                 StringBuffer str = new StringBuffer();
-                str.append(starId + "|" + movieId).append(line);
+                str.append(starId + "|" + movieSQLId).append(line);
                 fw.write(str.toString());
                 fw.flush();
 
