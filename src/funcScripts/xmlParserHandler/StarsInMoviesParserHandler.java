@@ -26,7 +26,7 @@ public class StarsInMoviesParserHandler extends DefaultHandler  {
     private HashMap<String, String> movieIdXMLSQLMap;
     private HashMap<String, String> movieTitleSQLMap;   // If movieId = null in XML file
 
-    File f = new File("./src/funcScripts/logs/StarsInMoviesRecordData.txt");
+    File f;
     FileWriter fw;
 
     // Create a dataSource which registered in web.xml
@@ -46,7 +46,8 @@ public class StarsInMoviesParserHandler extends DefaultHandler  {
             HelperFunc.initializeLogFile("StarInMoviesXMLParser");
             starsInMoviesRecordCount = 0;
             initializeDatabaseConnection();
-            FileWriter fw = new FileWriter(f);
+            f = new File("./src/funcScripts/logs/StarsInMoviesRecordData.txt");
+            fw = new FileWriter(f);
             HelperFunc.xmlHandlerLog("Start parsing StarInMoviesXML.");
         } catch (Exception e) {
             e.printStackTrace();
@@ -59,18 +60,9 @@ public class StarsInMoviesParserHandler extends DefaultHandler  {
         try {
             HelperFunc.printToConsole(starsInMoviesRecordCount);
             closeDatabaseConnection();
+            fw.close();
             HelperFunc.xmlHandlerLog("Finish parsing MovieXML. Data count: " + Integer.toString(starsInMoviesRecordCount) + ".");
             HelperFunc.closeLogFile();
-            fw.close();
-            String inputQuery = "load data local infile 'StarsInMoviesRecordData.txt'\n" +
-                    "into table stars_in_movies\n" +
-                    "fields terminated by '|' optionally enclosed by '\"' escaped by '\"'\n" +
-                    "lines terminated by '\\r\\n'\n" +
-                    "(starId,movieId)";
-
-            FileWriter fwSQL = new FileWriter("./src/funcScripts/logs/loadData.sql", true);
-            fwSQL.write(inputQuery + ";\n\n");
-            fwSQL.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -83,6 +75,7 @@ public class StarsInMoviesParserHandler extends DefaultHandler  {
         if (qName.equalsIgnoreCase("filmc")) {
             //create a new instance of employee
             HelperFunc.printToConsole(tempStarsInMovieRecord);
+            HelperFunc.printToConsole("Start of filmc");
             tempStarsInMovieRecord = new StarsInMoviesRecordClass();
             recordIsValid = true;
         }
@@ -118,7 +111,6 @@ public class StarsInMoviesParserHandler extends DefaultHandler  {
             if(recordIsValid) {
                 try {
                     writeStarsInMovieRecord2(tempStarsInMovieRecord);
-                    tempStarsInMovieRecord = null;
                     starsInMoviesRecordCount++;
                 }
                 catch(Exception e){
@@ -170,7 +162,6 @@ public class StarsInMoviesParserHandler extends DefaultHandler  {
             String selectStarFromDatabaseQuery = "select * from stars where name = ?";
             String selectMovieFromDatabaseQuery = "select * from movies where title = ?";
 
-
             // String filepathMovieRecord = f.getCanonicalPath();
 
             // Insert genresInMoviesRecord
@@ -186,7 +177,7 @@ public class StarsInMoviesParserHandler extends DefaultHandler  {
                 if(rsMovie.next()){
                     movieSQLId = rsMovie.getString("id");
                     updateMovieMap(movieId, movieTitle, movieSQLId);
-                    System.out.println("Successfully put " + movieId);
+                    // System.out.println("Successfully put " + movieId);
                 }
                 else{
                     HelperFunc.xmlHandlerLog("Error: " + currentRecord.singleNameDupliateString("") + " -> Movie doesn't exist.");
@@ -205,7 +196,7 @@ public class StarsInMoviesParserHandler extends DefaultHandler  {
                     if(rsStar.next()){
                         starId = rsStar.getString("id");
                         starNameSQLIdMap.put(starName, starId);
-                        System.out.println("Successfully put " + starId);
+                        // System.out.println("Successfully put " + starId);
                     }
                     else{
                         HelperFunc.xmlHandlerLog("Error: " + currentRecord.singleNameDupliateString(starName) + " -> Actor doesn't exist.");
@@ -227,6 +218,7 @@ public class StarsInMoviesParserHandler extends DefaultHandler  {
                 StringBuffer str = new StringBuffer();
                 str.append(starId + "|" + movieId).append(line);
                 fw.write(str.toString());
+                fw.flush();
 
 //                    PreparedStatement statementInsertGenreInMovie = dbcon.prepareStatement(insertStarsInMovieQuery);
 //                    statementInsertGenreInMovie.setString(1, starId);

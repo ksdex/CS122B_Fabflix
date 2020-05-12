@@ -81,11 +81,17 @@ public class SAXParserXML {
             //get a new instance of parser
             SAXParser spStarInMovie = spfStarInMovie.newSAXParser();
             funcScripts.xmlParserHandler.StarsInMoviesParserHandler starsInMovieHandler  = new funcScripts.xmlParserHandler.StarsInMoviesParserHandler(starNameSQLIdMap, movieIdXMLSQLMap, movieTitleSQLMap);
-            starNameSQLIdMap = null;
-            movieIdXMLSQLMap = null;
-            movieTitleSQLMap = null;
             //parse the file and also register this class for call backs
             spStarInMovie.parse("./data/casts124.xml", starsInMovieHandler);
+            String inputQuery = "load data local infile 'StarsInMoviesRecordData.txt'\n" +
+                    "into table stars_in_movies\n" +
+                    "fields terminated by '|' optionally enclosed by '\"' escaped by '\"'\n" +
+                    "lines terminated by '\\r\\n'\n" +
+                    "(starId,movieId)";
+
+            FileWriter fwSQL = new FileWriter("./src/funcScripts/logs/insertStarsRecord.sql");
+            fwSQL.write(inputQuery + ";\n\n");
+            fwSQL.close();
 
 
         } catch (SAXException se) {
@@ -95,9 +101,13 @@ public class SAXParserXML {
         } catch (IOException ie) {
             ie.printStackTrace();
         } catch (Exception e){
+            /*
             FileWriter fwSQL = new FileWriter("./src/funcScripts/logs/errorLogs.sql");
             fwSQL.write(e.toString() + ";\n\n");
             fwSQL.close();
+
+             */
+            e.printStackTrace();
         }
 
     }
@@ -220,7 +230,7 @@ public class SAXParserXML {
             movieMap = null; // release memory
             if(nextMovieId != maxMovieId + 1) {
                 //here should write the whole file into the database
-                String inputQuery = "load data infile '" + filepathMovieRecord + "'\n" +
+                String inputQuery = "load data local infile 'MovieRecordData.txt'\n" +
                         "into table movies\n" +
                         "fields terminated by '|' optionally enclosed by '\"' escaped by '\"'\n" +
                         "lines terminated by '\\r\\n'\n" +
@@ -232,7 +242,7 @@ public class SAXParserXML {
 
                 HelperFunc.printToConsole(inputQuery);
 
-                FileWriter fwSQL = new FileWriter("./src/funcScripts/logs/loadData.sql");
+                FileWriter fwSQL = new FileWriter("./src/funcScripts/logs/insertMovieRecord.sql");
                 fwSQL.write(inputQuery + ";\n\n");
                 fwSQL.close();
 

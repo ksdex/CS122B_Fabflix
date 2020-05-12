@@ -181,6 +181,11 @@ public class HelperFunc {
 
 
     static public void initializeLogFile(String fileName){
+        File logDir = new File("/src/funcScripts/logs");
+        if( !logDir.exists() && !logDir.isDirectory()){
+            logDir.mkdir();
+        }
+
         String d = getCurrentDate(false);
         String logFilePath = "./src/funcScripts/logs/log_" + d + "_" + fileName + ".log";
         File logFile = new File(logFilePath);
