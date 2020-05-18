@@ -81,11 +81,18 @@ public class SAXParserXML {
             //get a new instance of parser
             SAXParser spStarInMovie = spfStarInMovie.newSAXParser();
             funcScripts.xmlParserHandler.StarsInMoviesParserHandler starsInMovieHandler  = new funcScripts.xmlParserHandler.StarsInMoviesParserHandler(starNameSQLIdMap, movieIdXMLSQLMap, movieTitleSQLMap);
-            starNameSQLIdMap = null;
-            movieIdXMLSQLMap = null;
-            movieTitleSQLMap = null;
             //parse the file and also register this class for call backs
             spStarInMovie.parse("./data/casts124.xml", starsInMovieHandler);
+            String inputQuery = "load data local infile 'StarsInMoviesRecordData.txt'\n" +
+                    "into table stars_in_movies\n" +
+                    "fields terminated by '|' optionally enclosed by '\"' escaped by '\"'\n" +
+                    "lines terminated by '[]'" + // '\\r\\n'\n" +
+                    "(starId,movieId)";
+
+
+            FileWriter fwSQL = new FileWriter("./src/funcScripts/logs/insertStarsRecord.sql");
+            fwSQL.write(inputQuery + ";\n\n");
+            fwSQL.close();
 
 
         } catch (SAXException se) {
@@ -95,9 +102,13 @@ public class SAXParserXML {
         } catch (IOException ie) {
             ie.printStackTrace();
         } catch (Exception e){
+            /*
             FileWriter fwSQL = new FileWriter("./src/funcScripts/logs/errorLogs.sql");
             fwSQL.write(e.toString() + ";\n\n");
             fwSQL.close();
+
+             */
+            e.printStackTrace();
         }
 
     }
@@ -183,21 +194,26 @@ public class SAXParserXML {
             String movieIdQuery = "select max(id) as maxId from movies";
             int maxMovieId = getMaxId(movieIdQuery);
             int nextMovieId = maxMovieId + 1;
+            // System.out.println(nextMovieId);
 
             // File f1 = new File("C://ProgramData//MySQL//MySQL Server 8.0//Uploads//MovieRecordData.txt");
             File f = new File("./src/funcScripts/logs/MovieRecordData.txt");
+            File f2 = new File("./src/funcScripts/logs/RatingRecordData.txt");
             FileWriter fw = new FileWriter(f);
+            FileWriter fw2 = new FileWriter(f2);
             // FileWriter fw2 = new FileWriter(f2);
-            String filepathMovieRecord = "C:///ProgramData///MySQL///MySQL Server 8.0///Uploads///MovieRecordData.txt";
-            HelperFunc.printToConsole(filepathMovieRecord);
+            // String filepathMovieRecord = "C:///ProgramData///MySQL///MySQL Server 8.0///Uploads///MovieRecordData.txt";
+            // HelperFunc.printToConsole(filepathMovieRecord);
             for(int i = 0; i < movieRecord.size(); i++) {
                 // Check duplication
                 MovieRecordClass currentRecord = movieRecord.get(i);
                 String currentKey = getMovieSQLMapKey(currentRecord.title, Integer.toString(currentRecord.year), currentRecord.director);
-                String line = System.getProperty("line.separator");
+                String line = "[]"; //System.getProperty("line.separator");
                 StringBuffer str = new StringBuffer();
+                StringBuffer str2 = new StringBuffer();
                 // If duplicate
                 if(movieMap.containsKey(currentKey)){
+                    updateMovieMap(currentRecord.id, currentRecord.title, movieMap.get(currentKey));
                     HelperFunc.xmlHandlerLog("Error: " + currentRecord.toString() + " -> Duplicate entries.");
                     continue;
                 }
@@ -205,34 +221,44 @@ public class SAXParserXML {
                 else{
                     String sqlId = getId("tt", 7, nextMovieId);
                     movieMap.put(currentKey, sqlId);
+                    updateMovieMap(currentRecord.id, currentRecord.title, sqlId);
                     str.append(sqlId + "|" + currentRecord.title + "|" + currentRecord.year + "|" + currentRecord.director).append(line);
+                    str2.append(sqlId + "|0|0").append(line);
                     //str.append("tt"+nextMovieId + "," + newmovieElement.get(0) + "," + newmovieElement.get(1) + "," +
                     //            newmovieElement.get(2)
                     //          ).append(line);
                     fw.write(str.toString());
+                    fw2.write(str2.toString());
                     // fw2.write(str.toString());
                     nextMovieId++;
                 }
             }
             // After checking is down, put the data into sql database
             fw.close();
-            // fw2.close();
+            fw2.close();
             movieMap = null; // release memory
             if(nextMovieId != maxMovieId + 1) {
                 //here should write the whole file into the database
-                String inputQuery = "load data infile '" + filepathMovieRecord + "'\n" +
+                String inputQuery = "load data local infile 'MovieRecordData.txt'\n" +
                         "into table movies\n" +
                         "fields terminated by '|' optionally enclosed by '\"' escaped by '\"'\n" +
-                        "lines terminated by '\\r\\n'\n" +
+                        "lines terminated by '[]'" + // '\\r\\n'\n" +
                         "(id,@title,@year,@director)\n" +
                         "set\n" +
                         "title = nullif(@title,\"\"),\n" +
                         "year = nullif(@year,\"\"),\n" +
-                        "director = nullif(@director,\"\")";
+                        "director = nullif(@director,\"\");";
+
+
+                inputQuery += "\n\nload data local infile 'RatingRecordData.txt'\n" +
+                        "into table ratings\n" +
+                        "fields terminated by '|' optionally enclosed by '\"' escaped by '\"'\n" +
+                        "lines terminated by '[]'" + // '\\r\\n'\n" +
+                        "(movieId,rating,numVotes)";
 
                 HelperFunc.printToConsole(inputQuery);
 
-                FileWriter fwSQL = new FileWriter("./src/funcScripts/logs/loadData.sql");
+                FileWriter fwSQL = new FileWriter("./src/funcScripts/logs/insertMovieRecord.sql");
                 fwSQL.write(inputQuery + ";\n\n");
                 fwSQL.close();
 
@@ -253,7 +279,7 @@ public class SAXParserXML {
         }
     }
 
-
+    /*
     private void writeMovieRecord(){
         try {
             HelperFunc.initializeLogFile("MovieRecordWriter");
@@ -262,7 +288,7 @@ public class SAXParserXML {
             String movieIdQuery = "select max(id) as maxId from movies";
             String checkDuplicateQuery = "select * from movies where title = ? and year = ? and director = ?";
             String insertRatingQuery = "Insert into ratings values(?, 0, 0)";
-            int nextMovieId = getMaxId(movieIdQuery);
+            int nextMovieId = getMaxId(movieIdQuery) + 1;
 
             for(int i = 0; i < movieRecord.size(); i++) {
                 // Check duplication
@@ -308,7 +334,7 @@ public class SAXParserXML {
             e.printStackTrace();
         }
     }
-
+    */
 
     private void updateMovieMap(String movieId, String movieTitle, String sqlId){
         if(movieId == null) {
@@ -339,12 +365,16 @@ public class SAXParserXML {
             HelperFunc.initializeLogFile("GenresInMovieRecordWriter");
             HelperFunc.xmlHandlerLog("Start writing GenresInMoviesRecord.");
 
-            String insertGenreInMovieQuery = "Insert into genres_in_movies values(?, ?)";
+            // String insertGenreInMovieQuery = "Insert into genres_in_movies values(?, ?)";
             String insertGenreQuery = "Insert into genres (name) values (?)";
             String genreIdQuery = "select id from genres where name = ?";
             String selectAllGenreQuery = "select * from genres";
             String checkDuplicateQuery = "select * from genres_in_movies where genreId = ? and movieId = ?";
 
+            File f = new File("./src/funcScripts/logs/GenreInMovieRecordData.txt");
+            FileWriter fw = new FileWriter(f);
+            StringBuffer str = new StringBuffer();
+            String line = "[]"; //System.getProperty("line.separator");
 
             // Select all genres
             PreparedStatement statement = dbcon.prepareStatement(selectAllGenreQuery);
@@ -407,24 +437,40 @@ public class SAXParserXML {
                 }
 
                 // Insert into genres_in_movie
-                PreparedStatement statementInsertGenreInMovie = dbcon.prepareStatement(insertGenreInMovieQuery);
-                statementInsertGenreInMovie.setInt(1, genreSQLMap.get(genreName));
+                // PreparedStatement statementInsertGenreInMovie = dbcon.prepareStatement(insertGenreInMovieQuery);
+                // statementInsertGenreInMovie.setInt(1, genreSQLMap.get(genreName));
                 // HelperFunc.printToConsole(currentRecord.movieId);
                 // HelperFunc.printToConsole(currentRecord.movieName);
                 String movieSQLId = getMovieSQLId(currentRecord.movieId, currentRecord.movieName);
                 // HelperFunc.printToConsole(movieIdXMLSQLMap);
                 // HelperFunc.printToConsole(movieSQLId);
                 if(movieSQLId != null) {
+                    /*
                     statementInsertGenreInMovie.setString(2, movieSQLId);
                     int retID = statementInsertGenreInMovie.executeUpdate();
                     if (retID == 0) {
                         HelperFunc.xmlHandlerLog("Error: " + currentRecord.toString() + " -> Fail to insert into genres_in_movie movies.");
                     }
+                    */
+                    str.append(genreSQLMap.get(genreName) + "|" + movieSQLId).append(line);
+                    fw.write(str.toString());
                 }
                 else{
                     HelperFunc.xmlHandlerLog("Error: " + currentRecord.toString() + " -> Fail to insert into genres_in_movie movies.");
                 }
             }
+            fw.close();
+
+            String inputQuery = "load data local infile 'GenreInMoviesRecordData.txt'\n" +
+                    "into table genres_in_movies\n" +
+                    "fields terminated by '|' optionally enclosed by '\"' escaped by '\"'\n" +
+                    "lines terminated by '[]'" + // '\\r\\n'\n" +
+                    "(genreId,movieId)";
+
+            FileWriter fwSQL = new FileWriter("./src/funcScripts/logs/insertGenreInMovieRecord.sql");
+            fwSQL.write(inputQuery + ";\n\n");
+            fwSQL.close();
+
             HelperFunc.xmlHandlerLog("Finish writing GenresInMoviesRecord.");
             HelperFunc.closeLogFile();
         }
