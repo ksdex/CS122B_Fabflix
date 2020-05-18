@@ -27,10 +27,11 @@ public class MovieListServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
-        HelperFunc.printToConsole("action: ");
-        HelperFunc.printToConsole(action);
-        PrintWriter out = response.getWriter();
+        SessionParamList paramList = new SessionParamList(request);
         if(action != null) {
+            HelperFunc.printToConsole("action: ");
+            HelperFunc.printToConsole(action);
+            PrintWriter out = response.getWriter();
             try{
                 HelperFunc.addToCartButton(out, action, request);
             } catch (Exception e) {

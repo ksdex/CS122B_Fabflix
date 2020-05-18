@@ -34,6 +34,9 @@ public class SessionParamList {
         secondSort = request.getParameter("secondSort");
         secondSortOrder = request.getParameter("secondSortOrder");
         offset = request.getParameter("offset");
+        if(offset!=null&&offset.length()>=1){
+            System.out.println(offset);
+        }
         itemNum = request.getParameter("itemNum");
 
         starname = request.getParameter("starname");
