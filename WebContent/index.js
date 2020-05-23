@@ -404,7 +404,7 @@ let num = 0;
 // Update page number
 if(offset!=null){
     num = Number(offset)/Number(itemNum);
-    if(num > 1){
+    if(num + 1 > 1){
         document.getElementById('prevPage').disabled = false;
     }
 }
@@ -428,6 +428,10 @@ if(search!=null){
     let starname = getParameterByName('starname');
     if(starname!=null){
         url += "&starname=" + starname;
+    }
+    let fullTextSearchTitle = getParameterByName("fullTextSearchTitle");
+    if(fullTextSearchTitle != null){
+        url += "&fullTextSearchTitle=" + fullTextSearchTitle;
     }
     url += handleBack(1);
     targetUrl = url;

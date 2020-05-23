@@ -10,24 +10,30 @@ function consolePrint(tar){
 }
 
 function handleReturnUrl(lastParam){
-    let url = "index.html"
-    consolePrint(lastParam);
-    consolePrint(Object.keys(lastParam).length);
-    if(Object.keys(lastParam).length <= 0){
-        return url;
+    let back = getParameterByName("back");
+    if(back != 2) {
+        let url = "index.html"
+        consolePrint(lastParam);
+        consolePrint(Object.keys(lastParam).length);
+        if (Object.keys(lastParam).length <= 0) {
+            return url;
+        } else {
+            url += "?";
+            consolePrint(lastParam);
+            for (let item in lastParam) {
+                // consolePrint(lastParam[item]);
+                // consolePrint(lastParam[item] != null);
+                if (lastParam[item] != null) {
+                    url += item + "=" + lastParam[item] + "&";
+                }
+            }
+            url += "back=1";
+            return url;
+        }
     }
     else{
-        url += "?";
-        consolePrint(lastParam);
-        for(let item in lastParam){
-            // consolePrint(lastParam[item]);
-            // consolePrint(lastParam[item] != null);
-            if(lastParam[item] != null) {
-                url += item + "=" + lastParam[item] + "&";
-            }
-        }
-        url += "back=1";
-        return url;
+        document.getElementById("returnPrevMain").text = "Return to Main Page";
+        return "mainpage.html";
     }
 }
 
@@ -128,7 +134,7 @@ function handleMovieResult(resultData) {
         // Append the row created to the table body, which will refresh the page
         movieTableBodyElement.append(rowHTML);
     }
-    window.onload=reloadPage();
+    // window.onload=reloadPage();
 }
 
 

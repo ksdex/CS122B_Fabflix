@@ -12,23 +12,19 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.0.min.js" integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script>
 
-    <link href="https://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" rel="Stylesheet"></link>
-    <script src="https://code.jquery.com/ui/1.10.2/jquery-ui.js" ></script>
 
-    <!-- include jquery autocomplete JS-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.devbridge-autocomplete/1.4.7/jquery.autocomplete.min.js"></script>
-
-
+    <!-- Bootstrap for CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
 
 
 
     <style type="text/css">
         body{background-image: url(https://i.loli.net/2020/04/22/V3FZUGSi7yIRdt9.jpg);background-repeat: no-repeat;background-size:cover;font-size: 16px;}
         .form{background: rgba(255,255,255,0.2);width:400px;margin:100px auto;}
-        #login_form{display: block;}
-        #register_form{display: none;}
+        login_form{display: block;}
+        register_form{display: none;}
         .fa{display: inline-block;top: 27px;left: 6px;position: relative;color: #ccc;}
         input[type="text"],input[type="password"]{padding-left:26px;}
         .checkbox{padding-left:21px;}
@@ -54,11 +50,6 @@
                 <div class="form-group">
                     <i class="fa fa-user fa-lg"></i>
                     Title: <input class="form-control required" type="text" placeholder="title" id="title" autofocus="autofocus"/>
-                    <div class="container">
-                        <input type="text" name="hero" id="autocomplete"
-                               class="autocomplete-searchbox form-control"
-                               placeholder="Search Super Heroes"/>
-                    </div>
                 </div>
                 <div class="form-group">
                     <i class="fa fa-user fa-lg"></i>

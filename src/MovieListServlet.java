@@ -97,42 +97,47 @@ public class MovieListServlet extends HttpServlet {
     private String getSqlString(SessionParamList paramList, String order, String limit){
         String baseQuery = "select distinct m.id as movieid, m.title, m.year, m.director, r.rating from movies as m, ratings as r ";
         if(paramList.search != null){
-            boolean isFirstParam = true;
-            if(paramList.starname != null){
-                baseQuery += ", stars_in_movies as sim, stars as s ";
-                String movieStarRatingMatch = "where m.id = sim.movieId " + "and sim.starId = s.id " + "and r.movieId = m.id " +
-                        "and s.name like '%"+paramList.starname+"%' ";
-                baseQuery += movieStarRatingMatch;
-                isFirstParam = false;
-            }
+            if(paramList.fullTextSearchTitle == null) {
+                boolean isFirstParam = true;
+                if (paramList.starname != null) {
+                    baseQuery += ", stars_in_movies as sim, stars as s ";
+                    String movieStarRatingMatch = "where m.id = sim.movieId " + "and sim.starId = s.id " + "and r.movieId = m.id " +
+                            "and s.name like '%" + paramList.starname + "%' ";
+                    baseQuery += movieStarRatingMatch;
+                    isFirstParam = false;
+                }
 
-            // Search for title
-            if(paramList.title != null){
-                String titleFormat =  "match(m.title) against ('?' in boolean mode";
-                String[] titleList = paramList.title.split(" ");
-                if(titleList.length == 1){
-                    baseQuery += addBaseQueryConnector(isFirstParam) + "match(m.title) against ('+" + getRidOfBlankInUrl(paramList.title) + "*' in boolean mode";
+                // Search for title
+                if (paramList.title != null) {
+                    baseQuery += addBaseQueryConnector(isFirstParam) + "m.title like '%" + getRidOfBlankInUrl(paramList.title) + "%'";
+                    isFirstParam = false;
+                }
+                // Search for director
+                if (paramList.director != null) {
+                    baseQuery += addBaseQueryConnector(isFirstParam) + "m.director like '%" + getRidOfBlankInUrl(paramList.director) + "%'";
+                    isFirstParam = false;
+                }
+                // Search for year
+                if (paramList.year != null) {
+                    baseQuery += addBaseQueryConnector(isFirstParam) + "m.year = " + paramList.year;
+                    isFirstParam = false;
+                }
+                baseQuery += " and r.movieId = m.id ";
+            }
+            else {
+                String[] l = paramList.fullTextSearchTitle.split(" ");
+                baseQuery += "where match(title) against ( ? in boolean mode) and m.id = r.movieId";
+                if(l.length == 1) {
+                    baseQuery = baseQuery.replace("?", "'+" + paramList.fullTextSearchTitle + "*'");
                 }
                 else{
-                    baseQuery += addBaseQueryConnector(isFirstParam) + "match(m.title) against (";
-                    for(int i = 0; i < titleList.length; i++){
-                        baseQuery += " '+" + titleList[i] + "*'";
+                    String searchQuery = "";
+                    for(int i = 0; i < l.length; i++){
+                        searchQuery += " '+" + l[i] + "*'";
                     }
-                    baseQuery += " in boolean mode";
+                    baseQuery = baseQuery.replace("?", searchQuery);
                 }
-                isFirstParam = false;
             }
-            // Search for director
-            if(paramList.director != null){
-                baseQuery += addBaseQueryConnector(isFirstParam) + "m.director like '%" + getRidOfBlankInUrl(paramList.director) + "%'";
-                isFirstParam = false;
-            }
-            // Search for year
-            if(paramList.year != null){
-                baseQuery += addBaseQueryConnector(isFirstParam) + "m.year = " + paramList.year;
-                isFirstParam = false;
-            }
-            baseQuery += " and r.movieId = m.id ";
         }
         else if (paramList.genre != null){
             baseQuery += ", genres_in_movies as g " +
@@ -168,10 +173,11 @@ public class MovieListServlet extends HttpServlet {
         try {
             SessionParamList paramList = new SessionParamList(request);
             session.setAttribute("lastParamList", paramList);
+            HelperFunc.printToConsole(paramList);
             String order = getOrder(paramList.firstSort, paramList.firstSortOrder, paramList.secondSort, paramList.secondSortOrder);
             String limit = getLimit(paramList.offset, paramList.itemNum);
-            HelperFunc.printToConsole(order);
-            HelperFunc.printToConsole(limit);
+            HelperFunc.printToConsole("order: " + order);
+            HelperFunc.printToConsole("limit" + limit);
             HelperFunc.printToConsole("code is here");
 
             // Get a connection from dataSource

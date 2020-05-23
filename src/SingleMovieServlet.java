@@ -72,6 +72,9 @@ public class    SingleMovieServlet extends HttpServlet {
             if(lastParam != null){
                 jsonArray.add(HelperFunc.sessionParamToJsonObject(lastParam));
             }
+            else{
+                jsonArray.add(HelperFunc.sessionParamToJsonObject(new SessionParamList(request)));
+            }
 
             // write JSON string to output
             out.write(jsonArray.toString());

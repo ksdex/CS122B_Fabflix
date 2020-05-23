@@ -21,6 +21,8 @@ public class SessionParamList {
     public String year;
     public String director;
 
+    public String fullTextSearchTitle;
+
     public SessionParamList(HttpServletRequest request){
         search = request.getParameter("search");
         genre =  request.getParameter("genreid");
@@ -29,22 +31,33 @@ public class SessionParamList {
         back = request.getParameter("back");
         firstSort = request.getParameter("firstSort");
         firstSortOrder = request.getParameter("firstSortOrder");
-        HelperFunc.printToConsole(firstSort);
-        HelperFunc.printToConsole(firstSortOrder);
+        HelperFunc.printToConsole("firstOrder: " + firstSort);
+        HelperFunc.printToConsole("firstSortOrder: " + firstSortOrder);
         secondSort = request.getParameter("secondSort");
         secondSortOrder = request.getParameter("secondSortOrder");
         offset = request.getParameter("offset");
         if(offset!=null&&offset.length()>=1){
-            System.out.println(offset);
+            System.out.println("offset: " + offset);
         }
         itemNum = request.getParameter("itemNum");
 
-        starname = request.getParameter("starname");
-        title = request.getParameter("title");
+        starname = getRidOfSearch(request.getParameter("starname"));
+        title = getRidOfSearch(request.getParameter("title"));
         year = request.getParameter("year");
-        director = request.getParameter("director");
+        director = getRidOfSearch(request.getParameter("director"));
+
+        fullTextSearchTitle = getRidOfSearch(request.getParameter("fullTextSearchTitle"));
     }
 
+
+    private String getRidOfSearch(String tar){
+        if(tar != null){
+            return tar.replace("%20", " ");
+        }
+        else{
+            return tar;
+        }
+    }
 
     private String returnNullString(Object tar){
         if(tar == null){
@@ -65,6 +78,7 @@ public class SessionParamList {
                 " \n| secondSortOrder=" + returnNullString(secondSortOrder) + " | secondSortOrder=" + returnNullString(secondSortOrder) +
                 " \n| offset=" + returnNullString(offset) + " | itemNum=" + returnNullString(itemNum) +
                 " \n| starname=" + returnNullString(starname) + " | title=" + returnNullString(title) +
-                " \n| year=" + returnNullString(year) + " | director=" + returnNullString(director);
+                " \n| year=" + returnNullString(year) + " | director=" + returnNullString(director) +
+                " \n| fullTextSearchTitle=" + returnNullString(fullTextSearchTitle);
     }
 }

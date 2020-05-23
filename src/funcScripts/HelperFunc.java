@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HelperFunc {
-    static boolean debugMode = false;
+    static boolean debugMode = true;
 
     static public void printToConsole(Object tar){
         if(debugMode){
@@ -368,6 +368,7 @@ public class HelperFunc {
         jsonObject.addProperty("title", paramList.title);
         jsonObject.addProperty("year", paramList.year);
         jsonObject.addProperty("director", paramList.director);
+        jsonObject.addProperty("fullTextSearchTitle", paramList.fullTextSearchTitle);
         return jsonObject;
     }
 
