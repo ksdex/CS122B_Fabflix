@@ -108,9 +108,19 @@ public class MovieListServlet extends HttpServlet {
 
             // Search for title
             if(paramList.title != null){
-                baseQuery += addBaseQueryConnector(isFirstParam) + "m.title like '%" + getRidOfBlankInUrl(paramList.title) + "%'";
+                String titleFormat =  "match(m.title) against ('?' in boolean mode";
+                String[] titleList = paramList.title.split(" ");
+                if(titleList.length == 1){
+                    baseQuery += addBaseQueryConnector(isFirstParam) + "match(m.title) against ('+" + getRidOfBlankInUrl(paramList.title) + "*' in boolean mode";
+                }
+                else{
+                    baseQuery += addBaseQueryConnector(isFirstParam) + "match(m.title) against (";
+                    for(int i = 0; i < titleList.length; i++){
+                        baseQuery += " '+" + titleList[i] + "*'";
+                    }
+                    baseQuery += " in boolean mode";
+                }
                 isFirstParam = false;
-
             }
             // Search for director
             if(paramList.director != null){
@@ -167,7 +177,7 @@ public class MovieListServlet extends HttpServlet {
             // Get a connection from dataSource
             Connection dbcon = dataSource.getConnection();
             // Declare our statement
-            String query = getSqlString(paramList,order, limit);
+            String query = getSqlString(paramList, order, limit);
             HelperFunc.printToConsole(query);
 
             // write JSON string to output
