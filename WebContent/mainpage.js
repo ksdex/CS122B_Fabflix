@@ -44,6 +44,8 @@ function handleLookup(query, doneCallback) {
             "url": "movie-suggestion?query=" + escape(query),
             "success": function (data) {
                 // pass the data, query, and doneCallback function into the success handler
+                console.log("data:");
+                console.log(data);
                 handleLookupAjaxSuccess(data, query, doneCallback);
             },
             "error": function (errorData) {
@@ -72,8 +74,8 @@ function handleLookupAjaxSuccess(data, query, doneCallback) {
     console.log("lookup ajax successful")
 
     // parse the string into JSON
-    var jsonData = JSON.parse(data);
-    console.log(jsonData)
+    // var jsonData = JSON.parse(data);
+    // console.log(jsonData)
 
     // TODO: if you want to cache the result into a global variable you can do it here
     let curStorage = sessionStorage.getItem("queryStorage");
@@ -85,7 +87,7 @@ function handleLookupAjaxSuccess(data, query, doneCallback) {
     // call the callback function provided by the autocomplete library
     // add "{suggestions: jsonData}" to satisfy the library response format according to
     //   the "Response Format" section in documentation
-    doneCallback( { suggestions: jsonData } );
+    doneCallback( { suggestions: data } );
 }
 
 

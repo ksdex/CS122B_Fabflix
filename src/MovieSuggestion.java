@@ -1,4 +1,3 @@
-
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,6 +14,7 @@ import javax.sql.DataSource;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import funcScripts.HelperFunc;
 
 // server endpoint URL
 @WebServlet("/movie-suggestion")
@@ -64,18 +64,24 @@ public class MovieSuggestion extends HttpServlet {
             sqlQuery += " in boolean mode)";
         }
         sqlQuery += " limit 10";
+        HelperFunc.printToConsole("sqlQuery: " + sqlQuery);
         return sqlQuery;
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
+            response.setContentType("application/json"); // Response mime type
+            response.setCharacterEncoding("utf-8");
+
             // setup the response json arrray
             JsonArray jsonArray = new JsonArray();
 
             // get the query string from parameter
             String query = request.getParameter("query");
+            HelperFunc.printToConsole("query: " + query);
 
             // return the empty json array if query is null or empty
+            HelperFunc.printToConsole("Before if: " + (query == null) + " | " + (query.trim().isEmpty()));
             if (query == null || query.trim().isEmpty()) {
                 response.getWriter().write(jsonArray.toString());
                 return;
@@ -86,7 +92,7 @@ public class MovieSuggestion extends HttpServlet {
             // TODO: in project 4, you should do full text search with MySQL to find the matches on movies and stars
             Connection dbcon = dataSource.getConnection();
             String sqlQuery = getSql(query);
-            System.out.println(sqlQuery);
+            System.out.println("In doget: query = " + sqlQuery);
             PreparedStatement statement = dbcon.prepareStatement(sqlQuery);
             ResultSet rs = statement.executeQuery();
             // Iterate through each row of rs
@@ -95,10 +101,14 @@ public class MovieSuggestion extends HttpServlet {
                 String movieTitle = rs.getString("title");
 
                 // Create a JsonObject based on the data we retrieve from rs
+                HelperFunc.printToConsole("Generate: " + movieId + " | " + movieTitle);
                 jsonArray.add(generateJsonObject(movieId, movieTitle));
             }
 
             response.getWriter().write(jsonArray.toString());
+            rs.close();
+            statement.close();
+            dbcon.close();
             return;
         } catch (Exception e) {
             System.out.println(e);
