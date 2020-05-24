@@ -126,7 +126,9 @@ public class MovieListServlet extends HttpServlet {
             }
             else {
                 String[] l = paramList.fullTextSearchTitle.split(" ");
-                baseQuery += "where match(title) against ( ? in boolean mode) and m.id = r.movieId";
+                baseQuery += "where (match(title) against ( ? in boolean mode) " +
+                             "or edrec('" + paramList.fullTextSearchTitle + "', title, 2) ) " +
+                             "and m.id = r.movieId";
                 if(l.length == 1) {
                     baseQuery = baseQuery.replace("?", "'+" + paramList.fullTextSearchTitle + "*'");
                 }
