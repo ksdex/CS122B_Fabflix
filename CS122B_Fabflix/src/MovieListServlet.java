@@ -126,8 +126,10 @@ public class MovieListServlet extends HttpServlet {
             }
             else {
                 String[] l = paramList.fullTextSearchTitle.split(" ");
+                Integer lenient = paramList.fullTextSearchTitle.length() / 5;
+                HelperFunc.printToConsole("lenient: " + lenient);
                 baseQuery += "where (match(title) against ( ? in boolean mode) " +
-                             "or edrec('" + paramList.fullTextSearchTitle + "', title, 2) ) " +
+                             "or edrec('" + paramList.fullTextSearchTitle + "', title, " + lenient + ") ) " +
                              "and m.id = r.movieId";
                 if(l.length == 1) {
                     baseQuery = baseQuery.replace("?", "'+" + paramList.fullTextSearchTitle + "*'");

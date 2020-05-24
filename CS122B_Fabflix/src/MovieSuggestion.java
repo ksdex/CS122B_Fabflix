@@ -15,6 +15,7 @@ import javax.sql.DataSource;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import funcScripts.HelperFunc;
 
 // server endpoint URL
 @WebServlet("/movie-suggestion")
@@ -64,7 +65,9 @@ public class MovieSuggestion extends HttpServlet {
             sqlQuery += " in boolean mode)";
         }
         // T3: fuzzy search
-        sqlQuery += " or edrec('" + query + "', title, 2) ";
+        Integer lenient = query.length() / 5;
+        HelperFunc.printToConsole("lenient: " + lenient);
+        sqlQuery += " or edrec('" + query + "', title, " + lenient + ") ";
         sqlQuery += " limit 10";
         return sqlQuery;
     }

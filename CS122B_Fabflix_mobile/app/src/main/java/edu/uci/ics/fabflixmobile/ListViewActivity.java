@@ -126,7 +126,7 @@ public class ListViewActivity extends Activity {
                             // Post request form data
                             final Map<String, String> params = new HashMap<>();
                             params.put("search","true");
-                            params.put("title", searchString);
+                            params.put("fullTextSearchTitle", searchString);
                             params.put("offset",getPagenumber()-1+"");
                             params.put("itemNum",20+"");
                             return params;
@@ -178,7 +178,7 @@ public class ListViewActivity extends Activity {
                             // Post request form data
                             final Map<String, String> params = new HashMap<>();
                             params.put("search","true");
-                            params.put("title", searchString);
+                            params.put("fullTextSearchTitle", searchString);
                             params.put("offset",getPagenumber()-1+"");
                             params.put("itemNum",20+"");
                             return params;
