@@ -35,8 +35,14 @@ public class MainPageActivity extends Activity {
          * To connect to your machine, you need to use the below IP address
          * **/
 //        http://localhost:8080/cs122b_spring20_project2_fabflix_war/login.html
+<<<<<<< HEAD
 //        url = "https://ec2-50-18-137-69.us-west-1.compute.amazonaws.com:8443/cs122b-spring20-project2-login-cart-example/api/";
         url = "http://10.0.2.2:8080/cs122b_spring20_project2_fabflix_war/api/";
+=======
+        url = "https://ec2-50-18-137-69.us-west-1.compute.amazonaws.com:8443/cs122b-spring20-project2-login-cart-example/api/";
+        // "http://10.0.2.2:8080/cs122b_spring20_project2_fabflix_war/api/";
+        // "https://ec2-50-18-137-69.us-west-1.compute.amazonaws.com:8443/cs122b-spring20-project2-login-cart-example/api/"
+>>>>>>> d3515d40e62208ce4f69de95d743f407f7ab3d6a
 
         //assign a listener to call a function to handle the user request when clicking a button
         Search.setOnClickListener(new View.OnClickListener() {

@@ -15,6 +15,7 @@ import javax.sql.DataSource;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import funcScripts.HelperFunc;
 
 // server endpoint URL
 @WebServlet("/movie-suggestion")
@@ -52,7 +53,7 @@ public class MovieSuggestion extends HttpServlet {
      */
 
     private String getSql(String query){
-        String sqlQuery = "select id, title from movies where match(title) against (";
+        String sqlQuery = "select distinct id, title from movies where match(title) against (";
         String[] wordList = query.split(" ");
         if(wordList.length == 1){
             sqlQuery += "'+" + query + "*' in boolean mode)";
@@ -63,6 +64,10 @@ public class MovieSuggestion extends HttpServlet {
             }
             sqlQuery += " in boolean mode)";
         }
+        // T3: fuzzy search
+        Integer lenient = query.length() / 5;
+        HelperFunc.printToConsole("lenient: " + lenient);
+        sqlQuery += " or edrec('" + query + "', title, " + lenient + ") ";
         sqlQuery += " limit 10";
         return sqlQuery;
     }

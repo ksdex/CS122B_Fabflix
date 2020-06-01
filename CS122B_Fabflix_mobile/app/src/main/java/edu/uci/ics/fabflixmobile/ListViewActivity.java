@@ -40,8 +40,14 @@ public class ListViewActivity extends Activity {
         previousButton = findViewById(R.id.previousPage);
         page = findViewById(R.id.pagenumber);
         pagenumber = 1;
+<<<<<<< HEAD
 //        url = "https://ec2-50-18-137-69.us-west-1.compute.amazonaws.com:8443/cs122b-spring20-project2-login-cart-example/api/";
         url = "http://10.0.2.2:8080/cs122b_spring20_project2_fabflix_war/api/";
+=======
+        url = "https://ec2-50-18-137-69.us-west-1.compute.amazonaws.com:8443/cs122b-spring20-project2-login-cart-example/api/";
+        //"http://10.0.2.2:8080/cs122b_spring20_project2_fabflix_war/api/";
+        //"https://ec2-50-18-137-69.us-west-1.compute.amazonaws.com:8443/cs122b-spring20-project2-login-cart-example/api/";
+>>>>>>> d3515d40e62208ce4f69de95d743f407f7ab3d6a
         Bundle bundle = this.getIntent().getExtras();
         //接收name值
         String movies1 = bundle.getString("movies");
