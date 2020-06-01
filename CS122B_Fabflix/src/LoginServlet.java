@@ -1,6 +1,8 @@
 import com.google.gson.JsonObject;
 
 import javax.annotation.Resource;
+import javax.naming.Context;
+import javax.naming.InitialContext;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -45,7 +47,10 @@ public class LoginServlet extends HttpServlet {
         String password = request.getParameter("password");
         // int sameuser = 0;
         try {
-            dbcon = dataSource.getConnection();
+            Context initContext = new InitialContext();
+            Context envContext = (Context) initContext.lookup("java:/comp/env");
+            DataSource ds = (DataSource) envContext.lookup("jdbc/moviedb");
+            dbcon = ds.getConnection();
             String query = "SELECT password, id from customers where email = '"+email+"'";
             PreparedStatement statement = dbcon.prepareStatement(query);
             ResultSet rs = statement.executeQuery();
